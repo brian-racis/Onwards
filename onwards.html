@@ -1,0 +1,1872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Onwards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F3F5FA;
+    --card:#FFFFFF;
+    --ink:#2E2733;
+    --ink-soft:#5C5360;
+    --muted:#8890A2;
+    --line:#E6E9F1;
+    --predawn:#243057;
+    --dusk:#5B6B9E;
+    --calm:#6E86C6;
+    --calm-soft:#E9EEF7;
+    --calm-deep:#3E4E86;
+    --rose:#C96F89;
+    --amber:#F0A35E;
+    --gold:#F6C66B;
+    --c-physical:#E37B57;
+    --c-emotional:#D9688C;
+    --c-social:#E0A23C;
+    --c-intellectual:#7E5EA9;
+    --c-spiritual:#5C6FB8;
+    --c-occupational:#3E9B8E;
+    --c-financial:#9C5A8A;
+    --good:#3E9B8E;
+    --shadow:0 8px 30px rgba(45,55,90,.10);
+    --shadow-sm:0 2px 10px rgba(45,55,90,.06);
+    --radius:20px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{background:#E9DFD6;}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    color:var(--ink);
+    display:flex;justify-content:center;
+    min-height:100vh;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  #app{
+    width:100%;max-width:440px;background:var(--paper);
+    min-height:100vh;position:relative;overflow-x:hidden;
+    box-shadow:0 0 60px rgba(40,30,40,.12);
+  }
+  .view{display:none;}
+  .view.active{display:block;animation:fade .5s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+  h1,h2,h3,.serif{font-family:'Fraunces','Georgia',serif;font-weight:500;letter-spacing:-.01em;line-height:1.15;}
+
+  /* ============ ONBOARDING ============ */
+  .ob{
+    min-height:100vh;display:flex;flex-direction:column;
+    padding:34px 26px 30px;color:#FFF6EE;
+    background:linear-gradient(170deg,#1E2A52 0%,#3E4E86 38%,#8A6FA0 68%,#E89A66 100%);
+    position:relative;
+  }
+  .ob-sun{position:absolute;right:-40px;top:60px;width:160px;height:160px;border-radius:50%;
+    background:radial-gradient(circle at 50% 50%,#FBD98A,#F0A35E 60%,rgba(240,163,94,0) 72%);
+    filter:blur(2px);opacity:.85;}
+  .ob-step{flex:1;display:flex;flex-direction:column;position:relative;z-index:2;}
+  .ob-eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;opacity:.78;font-weight:600;margin-bottom:14px;}
+  .ob h1{font-size:40px;font-weight:600;margin-bottom:14px;color:#FFFBF6;font-family:'Fraunces',serif;}
+  .ob p.lead{font-size:16px;opacity:.9;max-width:330px;margin-bottom:8px;}
+  .ob .field{margin-top:26px;}
+  .ob label{display:block;font-size:14px;font-weight:600;opacity:.85;margin-bottom:10px;}
+  .ob input[type=text]{
+    width:100%;padding:15px 16px;border-radius:14px;border:1.5px solid rgba(255,255,255,.28);
+    background:rgba(255,255,255,.12);color:#fff;font-size:16px;font-family:inherit;
+  }
+  .ob input::placeholder{color:rgba(255,255,255,.55);}
+  .ob input:focus{outline:none;border-color:#FBD98A;background:rgba(255,255,255,.18);}
+  .choice-grid{display:flex;flex-direction:column;gap:10px;margin-top:6px;}
+  .choice{
+    text-align:left;padding:15px 16px;border-radius:14px;border:1.5px solid rgba(255,255,255,.25);
+    background:rgba(255,255,255,.08);color:#fff;font-size:15.5px;font-family:inherit;cursor:pointer;
+    transition:.18s;font-weight:500;
+  }
+  .choice .sub{display:block;font-size:13px;opacity:.7;font-weight:400;margin-top:3px;}
+  .choice:hover{background:rgba(255,255,255,.16);}
+  .choice.sel{background:#FFF6EE;color:var(--predawn);border-color:#FFF6EE;}
+  .choice.sel .sub{opacity:.62;}
+  .chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:4px;}
+  .chip{padding:10px 15px;border-radius:30px;border:1.5px solid rgba(255,255,255,.28);
+    background:rgba(255,255,255,.08);color:#fff;font-size:14px;font-weight:500;cursor:pointer;transition:.16s;}
+  .chip.sel{background:#FFF6EE;color:var(--predawn);border-color:#FFF6EE;}
+  .ob-foot{display:flex;align-items:center;gap:14px;margin-top:24px;}
+  .dots{display:flex;gap:7px;flex:1;}
+  .dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);transition:.3s;}
+  .dots i.on{background:#FFF6EE;width:20px;border-radius:4px;}
+  .btn-primary{
+    border:none;cursor:pointer;font-family:inherit;font-weight:600;font-size:16px;
+    background:#FFF6EE;color:var(--predawn);padding:14px 26px;border-radius:30px;transition:.18s;
+  }
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(0,0,0,.18);}
+  .btn-primary:disabled{opacity:.4;cursor:default;transform:none;box-shadow:none;}
+  .ob-skip{background:none;border:none;color:rgba(255,255,255,.7);font-family:inherit;font-size:14px;cursor:pointer;text-decoration:underline;}
+
+  /* ============ DASHBOARD ============ */
+  .sky-wrap{position:relative;height:230px;overflow:hidden;transition:background 1.1s ease;}
+  .sky-content{position:relative;z-index:3;padding:26px 24px 0;color:#fff;}
+  .greet-eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;opacity:.85;font-weight:600;}
+  .greet{font-size:29px;font-weight:600;font-family:'Fraunces',serif;margin-top:6px;text-shadow:0 1px 12px rgba(20,10,30,.25);}
+  .greet small{display:block;font-size:14px;font-weight:400;opacity:.85;margin-top:4px;font-family:'Inter',sans-serif;letter-spacing:0;text-transform:none;}
+  .sun{position:absolute;left:50%;width:96px;height:96px;border-radius:50%;z-index:2;
+    transform:translate(-50%,var(--sun-y,140px));transition:transform 1.1s cubic-bezier(.22,1,.36,1);
+    background:radial-gradient(circle at 50% 45%,#FFF3CE,#FBD98A 45%,#F4A857 78%);
+    box-shadow:0 0 50px 12px rgba(251,217,138,.55);}
+  .stars{position:absolute;inset:0;z-index:1;transition:opacity 1.1s ease;}
+  .stars i{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.85;}
+  .horizon{position:absolute;left:0;right:0;bottom:0;height:60px;z-index:2;
+    background:linear-gradient(to top,var(--paper),rgba(251,245,239,0));}
+
+  .pmeter{display:flex;align-items:center;gap:10px;margin-top:16px;position:relative;z-index:3;}
+  .pbar{flex:1;height:8px;border-radius:6px;background:rgba(255,255,255,.28);overflow:hidden;}
+  .pbar span{display:block;height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,#FBD98A,#FFF6EE);transition:width .6s ease;}
+  .pmeter b{font-size:13px;font-weight:600;white-space:nowrap;}
+
+  .sheet{position:relative;padding:22px 18px 96px;margin-top:-22px;border-radius:26px 26px 0 0;background:var(--paper);z-index:5;}
+
+  /* mood */
+  .mood{background:var(--calm-soft);border-radius:var(--radius);padding:16px 16px 14px;box-shadow:var(--shadow-sm);margin-bottom:20px;}
+  .mood h3{font-size:16px;margin-bottom:12px;color:var(--ink);}
+  .mood-row{display:flex;justify-content:space-between;gap:6px;}
+  .mood-btn{flex:1;border:none;background:none;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;
+    align-items:center;gap:5px;padding:6px 2px;border-radius:12px;transition:.16s;}
+  .mood-btn .em{line-height:1;color:var(--muted);display:flex;transition:.16s;}
+  .mood-btn .em svg{width:27px;height:27px;}
+  .mood-btn small{font-size:11px;color:var(--muted);font-weight:500;}
+  .mood-btn:hover{background:#E1E8F5;}
+  .mood-btn.sel{background:#DCE5F5;}
+  .mood-btn.sel .em{color:var(--ink);transform:scale(1.1);}
+  .mood-btn.sel small{color:var(--ink);font-weight:600;}
+
+  .section-label{display:flex;align-items:center;justify-content:space-between;margin:0 4px 12px;}
+  .section-label h2{font-size:21px;color:var(--ink);}
+  .section-label span{font-size:13px;color:var(--muted);font-weight:600;}
+
+  /* lesson cards */
+  .card{background:var(--card);border-radius:var(--radius);padding:16px 16px 15px;box-shadow:var(--shadow-sm);
+    margin-bottom:12px;border-left:4px solid var(--ac,#ccc);transition:.25s;position:relative;}
+  .card.done{opacity:.62;}
+  .card-top{display:flex;align-items:center;gap:11px;margin-bottom:10px;}
+  .icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;background:var(--ac-bg);color:var(--ac);}
+  .icon svg{width:22px;height:22px;}
+  .chat-head .av svg{width:20px;height:20px;}
+  .res-card .r-ic{color:var(--c-occupational);}
+  .res-card .r-ic svg{width:25px;height:25px;}
+  .dim-name{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ac);}
+  .dim-time{font-size:12px;color:var(--muted);font-weight:500;margin-top:1px;}
+  .card .action{font-size:16.5px;font-weight:600;color:var(--ink);font-family:'Fraunces',serif;letter-spacing:-.01em;line-height:1.25;}
+  .card.done .action{text-decoration:line-through;text-decoration-color:var(--muted);}
+  .card .why{font-size:13.5px;color:var(--ink-soft);margin-top:6px;line-height:1.45;}
+  .card-foot{display:flex;align-items:center;gap:10px;margin-top:13px;}
+  .mark{border:1.5px solid var(--ac);background:none;color:var(--ac);font-family:inherit;font-weight:600;
+    font-size:13.5px;padding:8px 16px;border-radius:30px;cursor:pointer;transition:.16s;display:flex;align-items:center;gap:6px;}
+  .mark:hover{background:var(--ac-bg);}
+  .mark.is-done{background:var(--ac);color:#fff;border-color:var(--ac);}
+  .swap{background:none;border:none;color:var(--muted);font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;text-decoration:underline;text-underline-offset:2px;}
+  .disclaimer{font-size:11px;color:var(--muted);margin-top:10px;font-style:italic;line-height:1.4;border-top:1px dashed var(--line);padding-top:9px;}
+
+  /* mind gym */
+  .gym{background:linear-gradient(160deg,#2E3A6B,#4A5A93);border-radius:24px;padding:20px 18px;color:#F4EEFA;margin:26px 0;box-shadow:var(--shadow);}
+  .gym-head{display:flex;align-items:center;gap:9px;margin-bottom:4px;}
+  .gym-head .dumb{display:flex;}
+  .gym-head .dumb svg{width:23px;height:23px;}
+  .gym-head h2{font-size:19px;color:#fff;}
+  .gym-sub{font-size:13px;opacity:.78;margin-bottom:16px;}
+  .gym-thought{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:15px 16px;}
+  .gym-thought .ql{font-size:11px;text-transform:uppercase;letter-spacing:.1em;opacity:.6;font-weight:700;}
+  .gym-thought .qt{font-size:17px;font-family:'Fraunces',serif;margin-top:6px;line-height:1.3;}
+  .gym-reframe{font-size:15px;line-height:1.5;margin-top:13px;padding-top:13px;border-top:1px solid rgba(255,255,255,.16);
+    display:none;}
+  .gym-reframe.show{display:block;animation:fade .4s ease;}
+  .gym-reframe .rl{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#FBD98A;font-weight:700;margin-bottom:5px;}
+  .gym-actions{display:flex;gap:9px;margin-top:15px;flex-wrap:wrap;}
+  .gym-btn{background:rgba(255,255,255,.14);border:none;color:#fff;font-family:inherit;font-weight:600;font-size:13.5px;
+    padding:9px 15px;border-radius:30px;cursor:pointer;transition:.16s;}
+  .gym-btn:hover{background:rgba(255,255,255,.24);}
+  .gym-btn.solid{background:#FBD98A;color:#3A2E5C;}
+  .gym-own{margin-top:14px;display:none;}
+  .gym-own.show{display:block;animation:fade .4s ease;}
+  .gym-own textarea{width:100%;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);
+    color:#fff;padding:11px 13px;font-family:inherit;font-size:14px;resize:none;}
+  .gym-own textarea::placeholder{color:rgba(255,255,255,.5);}
+  .gym-own textarea:focus{outline:none;border-color:#FBD98A;}
+  .lens-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px;}
+  .lens{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:12px;color:#fff;
+    font-family:inherit;font-size:13px;font-weight:500;padding:9px 12px;cursor:pointer;text-align:left;flex:1 1 46%;transition:.16s;}
+  .lens:hover{background:rgba(255,255,255,.2);}
+  .lens-answer{font-size:14px;line-height:1.5;margin-top:12px;opacity:.95;display:none;}
+  .lens-answer.show{display:block;animation:fade .4s;}
+
+  /* reflection */
+  .reflect{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-sm);margin-bottom:26px;}
+  .reflect h3{font-size:18px;color:var(--ink);font-family:'Fraunces',serif;}
+  .reflect p{font-size:13px;color:var(--muted);margin:4px 0 13px;}
+  .reflect-input{display:flex;gap:8px;}
+  .reflect-input input{flex:1;border:1.5px solid var(--line);border-radius:13px;padding:12px 14px;font-family:inherit;font-size:15px;background:var(--paper);color:var(--ink);}
+  .reflect-input input:focus{outline:none;border-color:var(--amber);}
+  .reflect-input button{border:none;background:var(--ink);color:#fff;border-radius:13px;padding:0 18px;font-family:inherit;font-weight:600;cursor:pointer;font-size:14px;}
+  .past{margin-top:13px;display:flex;flex-direction:column;gap:8px;}
+  .past-item{font-size:14px;color:var(--ink-soft);background:var(--paper);border-radius:11px;padding:10px 13px;display:flex;gap:9px;}
+  .past-item .d{color:var(--muted);font-size:12px;font-weight:600;white-space:nowrap;}
+
+  /* journey */
+  .journey{background:linear-gradient(160deg,#FFFFFF,#FFF8F0);border-radius:24px;padding:20px 18px;box-shadow:var(--shadow-sm);border:1px solid var(--line);}
+  .journey h3{font-size:18px;font-family:'Fraunces',serif;margin-bottom:16px;}
+  .stats{display:flex;gap:10px;margin-bottom:18px;}
+  .stat{flex:1;text-align:center;background:var(--paper);border-radius:15px;padding:13px 6px;}
+  .stat b{display:block;font-size:26px;font-family:'Fraunces',serif;font-weight:600;color:var(--ink);line-height:1;}
+  .stat b .fire{font-size:18px;}
+  .stat small{display:block;font-size:11px;color:var(--muted);font-weight:600;margin-top:5px;line-height:1.2;}
+  .cal-label{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:9px;}
+  .cal{display:grid;grid-template-columns:repeat(14,1fr);gap:6px;}
+  .cal i{aspect-ratio:1;border-radius:5px;background:#EFE5DB;transition:.2s;}
+  .cal i.a1{background:#F6D6A8;}
+  .cal i.a2{background:#F0A35E;}
+  .cal i.a3{background:#E37B57;}
+  .cal i.today{box-shadow:0 0 0 2px var(--ink);}
+
+  .footnote{text-align:center;font-size:12px;color:var(--muted);margin-top:24px;line-height:1.5;}
+  .footnote b{color:var(--ink-soft);}
+
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;
+    padding:13px 22px;border-radius:30px;font-size:14px;font-weight:500;opacity:0;transition:.3s;z-index:50;box-shadow:var(--shadow);pointer-events:none;max-width:90%;text-align:center;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  /* ---- Onwards+ / AI ---- */
+  .plus-badge{display:inline-flex;align-items:center;font-size:10px;font-weight:700;letter-spacing:.05em;
+    background:linear-gradient(90deg,var(--amber),var(--rose));color:#fff;padding:3px 8px;border-radius:20px;text-transform:uppercase;}
+  .personalize{display:flex;align-items:center;gap:9px;width:100%;justify-content:center;border:1.5px dashed var(--amber);
+    background:color-mix(in srgb,var(--amber) 9%,white);color:var(--ink);font-family:inherit;font-weight:600;font-size:14px;
+    padding:13px;border-radius:16px;cursor:pointer;margin-bottom:16px;transition:.16s;}
+  .personalize:hover{background:color-mix(in srgb,var(--amber) 17%,white);}
+  .personalize:disabled{cursor:default;}
+  .spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,0,0,.15);border-top-color:var(--amber);border-radius:50%;animation:spin .7s linear infinite;vertical-align:-2px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .ai-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--amber);text-transform:uppercase;margin-left:6px;}
+  .card.skel .action,.card.skel .why{color:transparent;border-radius:6px;
+    background:linear-gradient(90deg,#f1e9e1,#f8f2eb,#f1e9e1);background-size:200% 100%;animation:shimmer 1.2s infinite;}
+  @keyframes shimmer{to{background-position:-200% 0;}}
+  .gym-aibtn{background:#FBD98A;color:#3A2E5C;border:none;font-family:inherit;font-weight:700;font-size:13.5px;
+    padding:11px 16px;border-radius:30px;cursor:pointer;margin-top:12px;display:inline-flex;align-items:center;gap:8px;}
+  .gym-aibtn .plus-badge{background:rgba(58,46,92,.16);color:#3A2E5C;}
+  .gym-aibtn:disabled{opacity:.7;}
+  .gym-aibtn .spin{border-color:rgba(58,46,92,.3);border-top-color:#3A2E5C;}
+  .gym-airesult{background:rgba(255,255,255,.12);border:1px solid rgba(251,217,138,.45);border-radius:14px;padding:14px;margin-top:13px;
+    font-size:14.5px;line-height:1.55;display:none;}
+  .gym-airesult.show{display:block;animation:fade .4s;}
+  .gym-airesult .rl{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#FBD98A;font-weight:700;margin-bottom:6px;}
+  .gym-or{font-size:12px;opacity:.6;margin:15px 0 3px;}
+  .grace-note{font-size:12.5px;color:var(--c-occupational);font-weight:600;margin-top:14px;display:none;align-items:center;gap:6px;
+    background:color-mix(in srgb,var(--c-occupational) 9%,white);padding:10px 12px;border-radius:12px;}
+  .cal i.grace{background:repeating-linear-gradient(45deg,#EFE5DB,#EFE5DB 3px,#E2D6C8 3px,#E2D6C8 6px);}
+
+  /* ---- difficulty + help ---- */
+  .help-btn{background:none;border:none;color:var(--muted);font-size:12.5px;font-weight:600;cursor:pointer;
+    font-family:inherit;text-decoration:underline;text-underline-offset:2px;margin-left:auto;}
+  .diff{display:flex;align-items:center;gap:6px;margin-top:12px;padding-top:11px;border-top:1px solid var(--line);flex-wrap:wrap;}
+  .diff-label{font-size:12px;color:var(--muted);font-weight:600;margin-right:1px;}
+  .diff-pill{border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);font-family:inherit;font-size:12.5px;
+    font-weight:600;padding:6px 12px;border-radius:20px;cursor:pointer;transition:.14s;}
+  .diff-pill:hover{border-color:var(--muted);}
+  .diff-pill.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+  /* ---- chat ---- */
+  .fab{position:fixed;bottom:84px;right:max(16px,calc(50% - 220px + 16px));z-index:40;
+    background:linear-gradient(135deg,#5B6B9E,#3E4E86);color:#fff;border:none;border-radius:30px;padding:13px 19px;
+    font-family:inherit;font-weight:600;font-size:15px;box-shadow:0 8px 24px rgba(58,46,92,.4);cursor:pointer;
+    display:flex;align-items:center;gap:8px;transition:.18s;}
+  .fab:hover{transform:translateY(-2px);}
+  .chat-overlay{position:fixed;inset:0;background:rgba(30,20,35,.45);z-index:60;display:none;justify-content:center;align-items:flex-end;}
+  .chat-overlay.show{display:flex;animation:fade .25s;}
+  .chat-sheet{width:100%;max-width:440px;height:84vh;background:var(--paper);border-radius:24px 24px 0 0;display:flex;flex-direction:column;overflow:hidden;animation:slideup .3s ease;}
+  @keyframes slideup{from{transform:translateY(50px);}to{transform:none;}}
+  .chat-head{padding:17px 18px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:11px;background:var(--card);}
+  .chat-head .av{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#5B6B9E,#3E4E86);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+  .chat-head h3{font-size:16.5px;flex:1;font-family:'Fraunces',serif;display:flex;align-items:center;gap:7px;}
+  .chat-head .x{background:none;border:none;font-size:26px;color:var(--muted);cursor:pointer;line-height:.7;padding:0 4px;}
+  .chat-msgs{flex:1;overflow-y:auto;padding:18px 15px;display:flex;flex-direction:column;gap:10px;}
+  .msg{max-width:85%;padding:11px 14px;border-radius:16px;font-size:14.5px;line-height:1.5;white-space:pre-wrap;}
+  .msg.bot{background:var(--card);box-shadow:var(--shadow-sm);align-self:flex-start;border-bottom-left-radius:5px;color:var(--ink);}
+  .msg.user{background:var(--ink);color:#fff;align-self:flex-end;border-bottom-right-radius:5px;}
+  .typing{align-self:flex-start;display:flex;gap:5px;padding:14px 16px;background:var(--card);border-radius:16px;box-shadow:var(--shadow-sm);}
+  .typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:blink 1.3s infinite;}
+  .typing i:nth-child(2){animation-delay:.18s;}.typing i:nth-child(3){animation-delay:.36s;}
+  @keyframes blink{0%,65%,100%{opacity:.3;}30%{opacity:1;}}
+  .chat-suggest{display:flex;gap:8px;flex-wrap:wrap;padding:0 15px 8px;}
+  .chat-suggest button{background:var(--card);border:1px solid var(--line);border-radius:30px;padding:8px 13px;font-size:13px;font-family:inherit;color:var(--ink-soft);cursor:pointer;}
+  .chat-suggest button:hover{border-color:var(--dusk);color:var(--ink);}
+  .chat-input{display:flex;gap:9px;padding:12px 15px;border-top:1px solid var(--line);background:var(--card);}
+  .chat-input input{flex:1;border:1.5px solid var(--line);border-radius:22px;padding:12px 16px;font-family:inherit;font-size:15px;background:var(--paper);color:var(--ink);}
+  .chat-input input:focus{outline:none;border-color:var(--dusk);}
+  .chat-input button{border:none;background:var(--dusk);color:#fff;width:44px;height:44px;border-radius:50%;font-size:19px;cursor:pointer;flex-shrink:0;}
+
+  /* ---- bottom nav ---- */
+  .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;z-index:35;
+    background:rgba(255,251,246,.93);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border-top:1px solid var(--line);display:flex;padding:9px 0 12px;}
+  .nav button{flex:1;background:none;border:none;font-family:inherit;display:flex;flex-direction:column;align-items:center;
+    gap:3px;color:var(--muted);font-size:11px;font-weight:700;cursor:pointer;padding:4px;transition:.14s;}
+  .nav button .ic{display:flex;transition:.14s;}
+  .nav button .ic svg{width:24px;height:24px;}
+  .nav button.on{color:var(--ink);}
+
+
+  /* ---- resources ---- */
+  .res-head{padding:28px 22px 4px;}
+  .res-head h1{font-size:30px;font-family:'Fraunces',serif;font-weight:600;}
+  .res-head p{font-size:14px;color:var(--ink-soft);margin-top:6px;line-height:1.45;}
+  #resourcesBody{padding:16px 18px 110px;}
+  .res-card{background:var(--card);border-radius:var(--radius);padding:17px;box-shadow:var(--shadow-sm);margin-bottom:12px;
+    display:flex;gap:14px;align-items:center;cursor:pointer;transition:.16s;}
+  .res-card:hover{box-shadow:var(--shadow);transform:translateY(-1px);}
+  .res-card .r-ic{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+    font-size:23px;flex-shrink:0;background:color-mix(in srgb,var(--c-occupational) 13%,white);}
+  .res-card h3{font-size:16.5px;font-family:'Fraunces',serif;}
+  .res-card p{font-size:13px;color:var(--ink-soft);margin-top:3px;line-height:1.4;}
+  .res-card .arrow{margin-left:6px;color:var(--c-occupational);font-size:20px;font-weight:700;}
+  .res-card.soon{opacity:.6;cursor:default;}
+  .res-card.soon:hover{transform:none;box-shadow:var(--shadow-sm);}
+  .soon-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);
+    background:var(--paper);padding:4px 9px;border-radius:20px;margin-left:6px;white-space:nowrap;}
+
+  /* ---- LinkedIn Q&A ---- */
+  .li-back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:var(--ink-soft);
+    font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;margin-bottom:12px;padding:4px 0;}
+  .q-card{background:var(--card);border-radius:22px;padding:22px 20px;box-shadow:var(--shadow-sm);}
+  .q-eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--c-occupational);font-weight:700;}
+  .q-card h2{font-size:22px;font-family:'Fraunces',serif;margin:9px 0 7px;line-height:1.22;}
+  .q-hint{font-size:13.5px;color:var(--muted);margin-bottom:17px;line-height:1.45;}
+  .q-text{width:100%;border:1.5px solid var(--line);border-radius:14px;padding:13px 15px;font-family:inherit;
+    font-size:15.5px;background:var(--paper);color:var(--ink);resize:vertical;min-height:96px;line-height:1.5;}
+  .q-text:focus{outline:none;border-color:var(--c-occupational);}
+  .q-chips{display:flex;flex-wrap:wrap;gap:9px;}
+  .q-chip{padding:10px 15px;border-radius:30px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink-soft);
+    font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;transition:.14s;}
+  .q-chip.sel{background:var(--c-occupational);color:#fff;border-color:var(--c-occupational);}
+  .q-nav{display:flex;align-items:center;gap:12px;margin-top:20px;}
+  .q-dots{display:flex;gap:6px;flex:1;justify-content:center;}
+  .q-dots i{width:7px;height:7px;border-radius:50%;background:var(--line);transition:.2s;}
+  .q-dots i.on{background:var(--c-occupational);width:18px;border-radius:4px;}
+  .btn-occ{border:none;background:var(--c-occupational);color:#fff;font-family:inherit;font-weight:600;font-size:15px;
+    padding:12px 22px;border-radius:30px;cursor:pointer;transition:.16s;}
+  .btn-occ:hover{filter:brightness(.95);}
+  .btn-ghost{background:none;border:none;color:var(--muted);font-family:inherit;font-weight:600;cursor:pointer;font-size:14px;}
+
+  /* ---- plan ---- */
+  .plan-summary{background:linear-gradient(160deg,#3E9B8E,#2C7A6F);color:#fff;border-radius:22px;padding:20px;margin-bottom:18px;}
+  .plan-summary .pl{font-size:11px;text-transform:uppercase;letter-spacing:.1em;opacity:.82;font-weight:700;}
+  .plan-summary p{font-size:17px;font-family:'Fraunces',serif;line-height:1.38;margin-top:8px;}
+  .pillar{background:var(--card);border-radius:18px;padding:17px;box-shadow:var(--shadow-sm);margin-bottom:11px;border-left:4px solid var(--pc);}
+  .pillar .pn{display:flex;align-items:center;gap:10px;}
+  .pillar .num{width:26px;height:26px;border-radius:8px;background:var(--pc);color:#fff;font-weight:600;font-size:13px;
+    display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;flex-shrink:0;}
+  .pillar h3{font-size:17px;font-family:'Fraunces',serif;}
+  .pillar .pd{font-size:13.5px;color:var(--ink-soft);margin:9px 0 12px;line-height:1.5;}
+  .pillar .ex{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin-bottom:7px;}
+  .pillar ul{list-style:none;display:flex;flex-direction:column;gap:7px;}
+  .pillar li{font-size:13.5px;color:var(--ink);background:var(--paper);border-radius:10px;padding:9px 12px;line-height:1.4;}
+  .plan-extra{background:var(--card);border-radius:18px;padding:18px;box-shadow:var(--shadow-sm);margin-top:8px;}
+  .plan-extra h4{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--c-occupational);font-weight:700;margin-bottom:6px;}
+  .plan-extra .pe-body{font-size:14px;color:var(--ink-soft);line-height:1.5;margin-bottom:15px;}
+  .plan-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;}
+
+  /* ---- resource sub-tabs + military directory ---- */
+  .r-tabs{display:flex;gap:5px;margin-bottom:16px;background:var(--card);padding:5px;border-radius:30px;box-shadow:var(--shadow-sm);}
+  .r-tabs button{flex:1;border:none;background:none;font-family:inherit;font-weight:600;font-size:13.5px;color:var(--ink-soft);
+    padding:10px;border-radius:24px;cursor:pointer;transition:.14s;}
+  .r-tabs button.on{background:var(--c-occupational);color:#fff;}
+  .dir-group{margin-bottom:22px;}
+  .dir-group h3{font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--c-occupational);font-weight:700;margin:0 4px 10px;}
+  .dir-item{display:block;text-decoration:none;color:inherit;background:var(--card);border-radius:14px;padding:14px 15px;
+    box-shadow:var(--shadow-sm);margin-bottom:9px;transition:.15s;border:1px solid transparent;}
+  .dir-item:hover{box-shadow:var(--shadow);border-color:color-mix(in srgb,var(--c-occupational) 30%,transparent);}
+  .dir-item .di-top{display:flex;align-items:center;gap:8px;}
+  .dir-item h4{font-size:15px;font-family:'Fraunces',serif;flex:1;line-height:1.2;}
+  .dir-item .di-go{color:var(--c-occupational);font-size:14px;font-weight:700;}
+  .dir-item p{font-size:13px;color:var(--ink-soft);margin-top:6px;line-height:1.45;}
+  .dir-item .di-free{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--good);
+    background:color-mix(in srgb,var(--good) 12%,white);padding:3px 8px;border-radius:20px;}
+  .skill-row{display:flex;gap:11px;background:var(--card);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow-sm);margin-bottom:8px;align-items:flex-start;}
+  .skill-row .sk-ic{color:var(--c-occupational);font-size:13px;margin-top:2px;}
+  .skill-row .sk-n{font-size:14.5px;font-weight:600;color:var(--ink);}
+  .skill-row .sk-e{font-size:12.5px;color:var(--ink-soft);margin-top:3px;line-height:1.45;}
+  .role-chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .role-chip{background:color-mix(in srgb,var(--c-occupational) 12%,white);color:var(--c-occupational);font-size:13px;
+    font-weight:600;padding:8px 14px;border-radius:20px;}
+  .bullet-box{background:var(--card);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow-sm);margin-bottom:8px;
+    font-size:13.5px;line-height:1.5;color:var(--ink);display:flex;gap:10px;}
+  .bullet-box .bx{color:var(--c-occupational);font-weight:700;}
+
+  /* ---- career coach ---- */
+  .coach-hero{background:linear-gradient(160deg,#243057,#4A5A93);color:#F4EEFA;border-radius:22px;padding:24px 20px;box-shadow:var(--shadow);margin-bottom:16px;}
+  .coach-badge{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;background:rgba(255,255,255,.14);padding:6px 12px;border-radius:20px;margin-bottom:14px;}
+  .coach-hero h2{font-size:25px;font-family:'Fraunces',serif;color:#fff;line-height:1.15;margin-bottom:10px;}
+  .coach-hero>p{font-size:14px;line-height:1.55;opacity:.9;margin-bottom:18px;}
+  .coach-tenets{display:flex;flex-direction:column;gap:9px;margin-bottom:20px;}
+  .coach-tenets>div{background:rgba(255,255,255,.08);border-radius:12px;padding:11px 14px;}
+  .coach-tenets b{display:block;font-size:14px;color:#FBD98A;}
+  .coach-tenets span{font-size:12.5px;opacity:.82;line-height:1.4;}
+  .coach-hero .btn-occ{width:100%;background:#FBD98A;color:#2B2350;}
+  .coach-hero .btn-occ:hover{filter:brightness(1.04);}
+  .coach-quick{padding:0 4px;}
+  .coach-quick p{font-size:12.5px;color:var(--muted);font-weight:600;margin-bottom:9px;}
+  .coach-quick button{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-family:inherit;font-size:14px;color:var(--ink);cursor:pointer;margin-bottom:8px;transition:.14s;}
+  .coach-quick button:hover{border-color:var(--dusk);}
+
+  /* ---- speak with confidence ---- */
+  .drill-steps{margin:14px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:1.5;color:var(--ink);}
+  .tip{background:color-mix(in srgb,var(--c-occupational) 9%,white);border-radius:12px;padding:11px 13px;margin-top:15px;font-size:13px;color:var(--ink-soft);line-height:1.5;}
+  .tip b{color:var(--c-occupational);}
+  .lesson{background:var(--card);border-radius:16px;padding:17px;box-shadow:var(--shadow-sm);margin-bottom:11px;}
+  .lesson h3{font-size:17px;font-family:'Fraunces',serif;}
+  .lesson .ls{font-size:13.5px;color:var(--ink-soft);margin:6px 0 11px;line-height:1.5;}
+  .lesson ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .lesson li{font-size:13.5px;color:var(--ink);padding-left:18px;position:relative;line-height:1.45;}
+  .lesson li:before{content:'▸';position:absolute;left:0;color:var(--c-occupational);font-weight:700;}
+  .impromptu{background:linear-gradient(160deg,#3E9B8E,#2C7A6F);color:#fff;border-radius:18px;padding:18px;margin-top:16px;}
+  .impromptu h4{font-size:16px;font-family:'Fraunces',serif;color:#fff;}
+  .impromptu p.sub{font-size:12.5px;opacity:.85;margin:4px 0 13px;line-height:1.45;}
+  .impromptu-prompt{background:rgba(255,255,255,.13);border-radius:12px;padding:15px;font-size:17px;font-family:'Fraunces',serif;line-height:1.32;margin-bottom:13px;display:none;}
+  .impromptu-prompt.show{display:block;animation:fade .3s;}
+  .imp-btns{display:flex;gap:9px;flex-wrap:wrap;}
+  .imp-btn{background:#FBD98A;color:#216158;border:none;font-family:inherit;font-weight:700;font-size:13.5px;padding:10px 16px;border-radius:30px;cursor:pointer;}
+  .imp-btn.ghost{background:rgba(255,255,255,.16);color:#fff;}
+  .imp-btn:disabled{opacity:.7;}
+  .imp-feedback{margin-top:13px;display:none;}
+  .imp-feedback.show{display:block;animation:fade .3s;}
+  .imp-feedback textarea{width:100%;border-radius:12px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.12);color:#fff;padding:11px 13px;font-family:inherit;font-size:14px;resize:none;}
+  .imp-feedback textarea:focus{outline:none;border-color:#FBD98A;}
+  .imp-feedback textarea::placeholder{color:rgba(255,255,255,.55);}
+  .imp-result{background:rgba(255,255,255,.13);border-radius:12px;padding:13px;margin-top:12px;font-size:14px;line-height:1.5;display:none;}
+  .imp-result.show{display:block;animation:fade .3s;}
+
+  /* ---- tiers / paywall ---- */
+  .plan-pill{position:absolute;top:22px;right:20px;z-index:6;background:rgba(255,255,255,.2);backdrop-filter:blur(6px);
+    border:1px solid rgba(255,255,255,.32);color:#fff;font-family:inherit;font-weight:700;font-size:11.5px;padding:6px 12px;border-radius:20px;cursor:pointer;}
+  .plan-overlay{position:fixed;inset:0;background:rgba(30,20,35,.5);z-index:70;display:none;justify-content:center;align-items:flex-end;}
+  .plan-overlay.show{display:flex;animation:fade .25s;}
+  .plan-sheet{width:100%;max-width:440px;max-height:93vh;overflow-y:auto;background:var(--paper);border-radius:24px 24px 0 0;animation:slideup .3s ease;}
+  .plan-hero{background:linear-gradient(160deg,#2B2350,#9A5C84 95%);color:#fff;padding:26px 22px 22px;border-radius:24px 24px 0 0;position:relative;}
+  .plan-hero .x{position:absolute;top:15px;right:15px;background:rgba(255,255,255,.16);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:18px;cursor:pointer;line-height:1;}
+  .plan-hero .pk{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.8;}
+  .plan-hero h2{font-size:27px;font-family:'Fraunces',serif;margin:8px 0 7px;line-height:1.12;}
+  .plan-hero p{font-size:14px;opacity:.92;line-height:1.5;}
+  .plan-body{padding:20px;}
+  .benefit{display:flex;gap:11px;align-items:flex-start;margin-bottom:14px;}
+  .benefit .bi{color:var(--amber);font-size:15px;margin-top:2px;}
+  .benefit b{font-size:14.5px;display:block;margin-bottom:1px;}
+  .benefit span{font-size:13px;color:var(--ink-soft);line-height:1.45;}
+  .plan-options{display:flex;gap:10px;margin:20px 0 6px;}
+  .plan-opt{flex:1;border:1.5px solid var(--line);border-radius:16px;padding:14px 10px;text-align:center;cursor:pointer;transition:.14s;position:relative;}
+  .plan-opt.sel{border-color:var(--c-occupational);background:color-mix(in srgb,var(--c-occupational) 7%,white);}
+  .plan-opt .po-t{font-size:12.5px;font-weight:700;}
+  .plan-opt .po-p{font-size:22px;font-family:'Fraunces',serif;margin:5px 0 1px;}
+  .plan-opt .po-s{font-size:11px;color:var(--muted);}
+  .plan-opt .po-tag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--c-occupational);color:#fff;font-size:9px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;}
+  .plan-cta{width:100%;border:none;background:var(--ink);color:#fff;font-family:inherit;font-weight:700;font-size:16px;padding:15px;border-radius:30px;cursor:pointer;margin-top:14px;}
+  .plan-note{font-size:11px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5;}
+  .plan-manage{font-size:13px;color:var(--muted);text-align:center;margin-top:16px;cursor:pointer;text-decoration:underline;}
+  .plan-compare{margin-top:6px;}
+  .plan-compare .row{display:flex;align-items:center;font-size:13px;padding:9px 0;border-bottom:1px solid var(--line);}
+  .plan-compare .row span{flex:1;color:var(--ink-soft);}
+  .plan-compare .row .f,.plan-compare .row .pp{width:54px;text-align:center;font-weight:700;}
+  .plan-compare .row .pp{color:var(--c-occupational);}
+  .plan-compare .head span,.plan-compare .head .f,.plan-compare .head .pp{font-weight:700;color:var(--ink);font-size:12px;text-transform:uppercase;letter-spacing:.03em;}
+  .upsell{display:block;width:100%;text-align:center;background:color-mix(in srgb,var(--amber) 13%,white);border:1px solid color-mix(in srgb,var(--amber) 38%,transparent);border-radius:14px;padding:12px;font-family:inherit;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer;margin-top:16px;}
+  .upsell:hover{background:color-mix(in srgb,var(--amber) 22%,white);}
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important;}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ONBOARDING -->
+  <section class="view active" id="onboarding">
+    <div class="ob">
+      <div class="ob-sun"></div>
+      <div class="ob-step" id="obStep"></div>
+      <div class="ob-foot">
+        <div class="dots" id="obDots"></div>
+        <button class="ob-skip" id="obSkip" style="display:none">Skip</button>
+        <button class="btn-primary" id="obNext" disabled>Continue</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section class="view" id="dashboard">
+    <div class="sky-wrap" id="sky">
+      <div class="stars" id="stars"></div>
+      <button class="plan-pill" id="planPill">Upgrade ✦</button>
+      <div class="sun" id="sun"></div>
+      <div class="sky-content">
+        <div class="greet-eyebrow" id="dateLine">—</div>
+        <div class="greet" id="greetLine">Good morning</div>
+        <div class="pmeter">
+          <div class="pbar"><span id="pbar"></span></div>
+          <b id="pcount">0 of 7</b>
+        </div>
+      </div>
+      <div class="horizon"></div>
+    </div>
+
+    <div class="sheet">
+      <div class="mood">
+        <h3>How’s today landing?</h3>
+        <div class="mood-row" id="moodRow"></div>
+      </div>
+
+      <div class="section-label">
+        <h2>Today's practice</h2>
+        <span id="practiceCount"></span>
+      </div>
+      <button class="personalize" id="personalizeBtn">
+        <span class="plus-badge">Onwards+</span>
+        <span id="personalizeLabel">Personalize today for me</span>
+      </button>
+      <div id="cards"></div>
+
+      <!-- MIND GYM -->
+      <div class="gym">
+        <div class="gym-head"><span class="dumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/></svg></span><h2>Mind Gym</h2></div>
+        <div class="gym-sub">Catch the thought. Question it. Choose a truer one.</div>
+        <div class="gym-thought">
+          <div class="ql">A thought that might be visiting</div>
+          <div class="qt" id="gymThought">—</div>
+          <div class="gym-reframe" id="gymReframe">
+            <div class="rl">Reframe</div>
+            <span id="gymReframeText"></span>
+          </div>
+        </div>
+        <div class="gym-actions">
+          <button class="gym-btn solid" id="gymReveal">Reframe it</button>
+          <button class="gym-btn" id="gymNew">Another thought</button>
+          <button class="gym-btn" id="gymOwnToggle">My own thought</button>
+        </div>
+        <div class="gym-own" id="gymOwn">
+          <textarea id="gymOwnText" rows="2" placeholder="What's the thought weighing on you right now?"></textarea>
+          <button class="gym-aibtn" id="gymAiBtn"><span class="plus-badge">Onwards+</span>Reframe this for me</button>
+          <div class="gym-airesult" id="gymAiResult"><div class="rl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" width="13" height="13" style="vertical-align:-2px;margin-right:5px;"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Your reframe</div><span id="gymAiText"></span></div>
+          <div class="gym-or">Or work through it yourself:</div>
+          <div class="lens-grid">
+            <button class="lens" data-lens="0">Is it 100% true?</button>
+            <button class="lens" data-lens="1">What would I tell a friend?</button>
+            <button class="lens" data-lens="2">What's in my control?</button>
+            <button class="lens" data-lens="3">The kinder, truer version?</button>
+          </div>
+          <div class="lens-answer" id="lensAnswer"></div>
+        </div>
+      </div>
+
+      <!-- REFLECTION -->
+      <div class="reflect">
+        <h3>One good thing</h3>
+        <p>End the day by naming something that went right, however small.</p>
+        <div class="reflect-input">
+          <input type="text" id="reflectInput" placeholder="Today, one good thing was…" maxlength="140">
+          <button id="reflectSave">Save</button>
+        </div>
+        <div class="past" id="reflectPast"></div>
+      </div>
+
+      <!-- JOURNEY -->
+      <div class="journey">
+        <h3>Your journey</h3>
+        <div class="stats">
+          <div class="stat"><b><span id="stStreak">0</span></b><small>day streak</small></div>
+          <div class="stat"><b id="stWins">0</b><small>total wins</small></div>
+          <div class="stat"><b id="stDays">0</b><small>days shown up</small></div>
+        </div>
+        <div class="cal-label">Last 14 days</div>
+        <div class="cal" id="cal"></div>
+        <div class="grace-note" id="graceNote"></div>
+      </div>
+
+      <div class="footnote">
+        You showed up today. <b>That's the win.</b><br>Onward. Tomorrow's still open.
+      </div>
+    </div>
+  </section>
+
+  <!-- RESOURCES -->
+  <section class="view" id="resources">
+    <div class="res-head">
+      <h1>Resources</h1>
+      <p>Guided tools to move you forward. One focused thing at a time.</p>
+    </div>
+    <div id="resourcesBody"></div>
+  </section>
+
+  <nav class="nav" id="nav" style="display:none">
+    <button data-tab="today" class="on"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m8 6 4-4 4 4"/><path d="M16 18a4 4 0 0 0-8 0"/></svg></span>Today</button>
+    <button data-tab="resources"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span>Resources</button>
+  </nav>
+
+  <button class="fab" id="fab" style="display:none">💬 <span>Ask</span></button>
+
+  <div class="chat-overlay" id="chatOverlay">
+    <div class="chat-sheet">
+      <div class="chat-head">
+        <div class="av" id="chatAv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M9.94 14.06A2 2 0 0 0 8.5 12.62L2.37 11a.5.5 0 0 1 0-.97L8.5 8.44A2 2 0 0 0 9.94 7L11.5.87a.5.5 0 0 1 .97 0L14.06 7A2 2 0 0 0 15.5 8.44l6.13 1.59a.5.5 0 0 1 0 .97L15.5 12.6a2 2 0 0 0-1.44 1.44L12.5 20.2a.5.5 0 0 1-.97 0Z"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg></div>
+        <h3><span id="chatTitle">Ask Onwards</span> <span class="plus-badge">Onwards+</span></h3>
+        <button class="x" id="chatClose" aria-label="Close">×</button>
+      </div>
+      <div class="chat-msgs" id="chatMsgs"></div>
+      <div class="chat-suggest" id="chatSuggest"></div>
+      <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Ask about today, or anything…" autocomplete="off">
+        <button id="chatSend" aria-label="Send">↑</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-overlay" id="planOverlay"><div class="plan-sheet" id="planSheet"></div></div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+/* ============================================================
+   ONWARDS prototype
+   State is held in-memory for this session (resets on reload).
+   A shippable version would swap this for real accounts + storage.
+============================================================ */
+
+/* ---------- ICONS ---------- */
+const ICONS = {
+  physical:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>',
+  emotional:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>',
+  social:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  intellectual:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>',
+  spiritual:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></svg>',
+  occupational:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
+  financial:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M17 14h.01"/><path d="M7 7h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h13"/></svg>'
+};
+
+/* ---------- CONTENT ---------- */
+const DIMENSIONS = [
+  {key:'physical', name:'Physical', items:[
+    {a:'Walk for 10 minutes. Leave the phone behind.', w:'Movement clears the stress chemistry of a hard search. The body holds it too.', t:'10 min'},
+    {a:'Do 20 jumping jacks, right now.', w:'A 60-second burst breaks the doomscroll and wakes you back up.', t:'2 min'},
+    {a:'Stretch your neck, shoulders, and back.', w:'Hours at the laptop tighten you up. Loosen what the search clenches.', t:'5 min'},
+    {a:'Step outside and catch 5 minutes of daylight.', w:'Morning light steadies sleep and mood. Both wobble when routine disappears.', t:'5 min'},
+    {a:'Drink a full glass of water before your coffee.', w:'Small, winnable, and your brain simply works better hydrated.', t:'1 min'},
+    {a:'Do 10 slow squats by your desk.', w:'Strength is a quiet confidence you control completely.', t:'3 min'},
+    {a:'Take the stairs or walk one extra block.', w:'Tiny choices compound. You\u2019re proving you still show up for yourself.', t:'5 min'},
+    {a:'Put on one song and move however you want.', w:'Joy isn\u2019t paused until you\u2019re hired. Reclaim three minutes of it.', t:'4 min'},
+    {a:'Try a 5-minute beginner workout video.', w:'A guided start removes the \u201Cwhat do I even do\u201D friction.', t:'5 min'},
+    {a:'Stand and take 10 deep breaths with long exhales.', w:'Long exhales tell your nervous system you\u2019re safe. Use it before applying.', t:'2 min'},
+    {a:'Plan one real meal with a vegetable in it.', w:'Feeding yourself well is a vote for your future self.', t:'10 min'},
+    {a:'Walk while you take your next call.', w:'Stack movement onto something you were going to do anyway.', t:'\u2014'}
+  ]},
+  {key:'emotional', name:'Emotional', items:[
+    {a:'Name what you\u2019re feeling in a single word.', w:'You can\u2019t manage a feeling you won\u2019t look at. Naming it shrinks it.', t:'1 min'},
+    {a:'Write one thing you handled well this week.', w:'Job loss makes you forget you\u2019re capable. Evidence helps.', t:'3 min'},
+    {a:'Talk to yourself like you\u2019d talk to a friend in your shoes.', w:'You\u2019d never call a friend a failure for being laid off. Extend that inward.', t:'2 min'},
+    {a:'Feel it fully for 5 minutes. Then set it down.', w:'Feelings need acknowledgment, not a permanent residence.', t:'5 min'},
+    {a:'List three things still good, unrelated to work.', w:'Your worth was never only the job. Remind yourself what else is true.', t:'3 min'},
+    {a:'Catch one \u201Cshould\u201D you\u2019re carrying and question it.', w:'\u201CI should have it figured out by now\u201D is a story, not a fact.', t:'3 min'},
+    {a:'Do one small thing purely because it feels good.', w:'Pleasure isn\u2019t a reward you earn after employment.', t:'\u2014'},
+    {a:'Write the sentence you fear is true. Then read it back.', w:'Fears lose power in daylight. Most don\u2019t survive being written down.', t:'5 min'},
+    {a:'Forgive yourself for one thing today.', w:'Carrying guilt quietly costs the energy you need to search.', t:'2 min'},
+    {a:'Hand on your chest, three slow breaths.', w:'A simple way back to yourself when the spiral starts.', t:'1 min'},
+    {a:'Celebrate your effort today, not just outcomes.', w:'You control effort. Outcomes tend to follow it.', t:'1 min'},
+    {a:'Ask what you actually need: rest, support, or action.', w:'Matching the need to the moment beats forcing the wrong one.', t:'2 min'}
+  ]},
+  {key:'social', name:'Social', items:[
+    {a:'Text one friend just to say hi.', w:'Isolation grows in silence. Two lines breaks it.', t:'2 min'},
+    {a:'Tell one person what\u2019s actually going on with you.', w:'Hiding the struggle is exhausting. Let one person in.', t:'10 min'},
+    {a:'Reconnect with a former colleague you liked.', w:'Warm ties reopen doors, and remind you that you\u2019re respected.', t:'5 min'},
+    {a:'Ask someone how they are, and really listen.', w:'Giving connection feels as good as getting it.', t:'5 min'},
+    {a:'Make one plan to see a person this week.', w:'Put something human on the calendar.', t:'3 min'},
+    {a:'Thank someone who\u2019s helped you lately.', w:'Gratitude strengthens the ties you\u2019ll lean on.', t:'3 min'},
+    {a:'Join one community in your field or a hobby.', w:'Belonging somewhere counters the \u201CI\u2019m alone in this\u201D feeling.', t:'10 min'},
+    {a:'Reply to that message you left on read.', w:'Small social debts weigh more than they should. Clear one.', t:'2 min'},
+    {a:'Ask one person for a coffee or a quick call.', w:'Most people say yes, and most genuinely want to help.', t:'3 min'},
+    {a:'Share a small win with someone who\u2019ll cheer.', w:'Wins grow when they\u2019re witnessed.', t:'2 min'},
+    {a:'Offer to help someone with something you\u2019re good at.', w:'Being useful is the fast route back to feeling capable.', t:'\u2014'},
+    {a:'Sit somewhere with people: a caf\u00e9, library, or park.', w:'Even quiet proximity to others lifts the mood.', t:'\u2014'}
+  ]},
+  {key:'intellectual', name:'Intellectual', items:[
+    {a:'Read 10 pages of a book.', w:'Ten pages a day is a dozen books a year. Momentum, not pressure.', t:'15 min'},
+    {a:'Watch one video on a topic you know nothing about.', w:'Curiosity is the opposite of the doom spiral.', t:'10 min'},
+    {a:'Spend 20 minutes building a small project with AI.', w:'Make something today. Builders feel less stuck than searchers.', t:'20 min'},
+    {a:'Learn one new tool feature or shortcut.', w:'Tiny skill gains stack into real fluency.', t:'5 min'},
+    {a:'Take notes on one idea worth keeping.', w:'Writing it down means you actually learned it.', t:'5 min'},
+    {a:'Explain one thing you know to an imaginary beginner.', w:'If you can teach it simply, you own it. Gold for interviews.', t:'10 min'},
+    {a:'Read one article in your field and form an opinion.', w:'Staying current keeps you sharp and conversation-ready.', t:'15 min'},
+    {a:'Start one lesson of a free online course.', w:'One lesson is a low bar. Bars are for clearing.', t:'20 min'},
+    {a:'Write 200 words about something you find interesting.', w:'Thinking on paper sharpens how you think out loud.', t:'15 min'},
+    {a:'Solve one puzzle or practice problem.', w:'A little productive struggle builds confidence under pressure.', t:'10 min'},
+    {a:'Explore a career-adjacent skill you\u2019re curious about.', w:'Pivots start as curiosities. Follow one a little.', t:'15 min'},
+    {a:'Listen to one episode of a smart podcast.', w:'Learn while you walk or tidy up. Stacking wins.', t:'\u2014'}
+  ]},
+  {key:'spiritual', name:'Spiritual', items:[
+    {a:'Do a 5-minute guided meditation.', w:'Five minutes of stillness lowers the noise the search creates.', t:'5 min'},
+    {a:'Sit quietly and follow ten slow breaths.', w:'No app needed. Just you and your breath.', t:'3 min'},
+    {a:'Write down what actually matters to you.', w:'This chapter is a chance to ask what you want it to mean.', t:'10 min'},
+    {a:'Step outside and notice three things you sense.', w:'Grounding pulls you out of the future and into now.', t:'3 min'},
+    {a:'Name one thing you\u2019re grateful for and sit with it.', w:'Gratitude rewires attention away from lack.', t:'2 min'},
+    {a:'Reflect on a value to carry into your next role.', w:'Define the \u201Cwhy\u201D before chasing the \u201Cwhat.\u201D', t:'5 min'},
+    {a:'Spend 5 minutes in nature, or just watch the sky.', w:'Awe shrinks problems to a workable size.', t:'5 min'},
+    {a:'Do one ordinary thing slowly, with full attention.', w:'Wash a cup, sip your tea. Presence is the practice.', t:'5 min'},
+    {a:'Set one intention for the day, in a single sentence.', w:'A clear intention beats a frantic to-do list.', t:'2 min'},
+    {a:'Let go of one thing outside your control.', w:'Naming what you can\u2019t control frees energy for what you can.', t:'3 min'},
+    {a:'Picture yourself a year from now, settled.', w:'A calm future self can guide today\u2019s choices.', t:'5 min'},
+    {a:'End the day noting one thing that went right.', w:'What you review before sleep shapes how you wake.', t:'2 min'}
+  ]},
+  {key:'occupational', name:'Occupational', items:[
+    {a:'Post one short, honest thought on LinkedIn.', w:'Visibility creates luck. One post can reach the right person.', t:'15 min'},
+    {a:'Improve one bullet on your resume.', w:'Don\u2019t redo the whole thing. Just make one line stronger.', t:'15 min'},
+    {a:'Apply to one role you genuinely want.', w:'One thoughtful application beats ten copy-pastes.', t:'20 min'},
+    {a:'Watch one MasterClass or talk in your field.', w:'Learn from someone who\u2019s where you want to be.', t:'20 min'},
+    {a:'Reach out to one person for an informational chat.', w:'Most jobs come through people, not portals.', t:'10 min'},
+    {a:'Write three sentences on what you do best.', w:'You\u2019ll reuse these in every pitch, cover letter, and interview.', t:'10 min'},
+    {a:'Research one company you\u2019d love to work for.', w:'Target on purpose instead of applying everywhere.', t:'15 min'},
+    {a:'Practice \u201Ctell me about yourself\u201D out loud.', w:'The story you tell about your gap matters. Make it strong.', t:'10 min'},
+    {a:'Sharpen your LinkedIn headline and \u201Cabout.\u201D', w:'Recruiters skim. Make the first lines earn their place.', t:'15 min'},
+    {a:'Ask someone for feedback on your resume or pitch.', w:'An outside eye catches what you can\u2019t.', t:'10 min'},
+    {a:'List three skills from your last role that transfer anywhere.', w:'Reframe experience as portable, not lost.', t:'10 min'},
+    {a:'Set one small, doable goal for tomorrow\u2019s search.', w:'End today by removing tomorrow\u2019s \u201Cwhere do I start.\u201D', t:'5 min'}
+  ]},
+  {key:'financial', name:'Financial', items:[
+    {a:'Write down this month\u2019s essential expenses.', w:'Clarity reduces money fear more than avoidance ever will.', t:'15 min', fin:true},
+    {a:'Check which benefits or assistance you may qualify for.', w:'This is exactly what those systems exist for. Use them without shame.', t:'20 min', fin:true},
+    {a:'Learn what an index fund is, in plain English.', w:'Five minutes of literacy demystifies \u201Cinvesting.\u201D', t:'10 min', fin:true},
+    {a:'Find one subscription you can pause.', w:'A small cut today buys runway and calm.', t:'5 min', fin:true},
+    {a:'Brainstorm three ways you could earn a little on the side.', w:'Options reduce panic, even the ones you don\u2019t use.', t:'10 min', fin:true},
+    {a:'Read one beginner piece on emergency funds.', w:'Knowing the playbook makes the future feel less random.', t:'10 min', fin:true},
+    {a:'Make a \u201Cneeds vs wants\u201D list for this week.', w:'Spending on purpose beats guilt after the fact.', t:'10 min', fin:true},
+    {a:'Look up one freelance or gig platform in your field.', w:'A small income stream can bridge the gap.', t:'15 min', fin:true},
+    {a:'Set one tiny, specific budget or savings goal.', w:'Small targets you can actually hit rebuild a sense of control.', t:'5 min', fin:true},
+    {a:'Learn the difference between \u201Cgood\u201D and \u201Cbad\u201D debt.', w:'Understanding the tools lowers the fear of them.', t:'10 min', fin:true},
+    {a:'Note one money decision you\u2019re proud of.', w:'You\u2019ve made smart calls before. You\u2019ll make them again.', t:'3 min', fin:true},
+    {a:'Plan a no-spend day this week.', w:'A small challenge turns restriction into a game you win.', t:'\u2014', fin:true}
+  ]}
+];
+
+const GYM = [
+  {t:'I\u2019ll never find another job.', r:'I haven\u2019t found it yet. Markets shift and it only takes one yes. My job is to keep putting myself where that yes can happen.'},
+  {t:'Getting laid off means I failed.', r:'Layoffs are usually about budgets and timing, not my worth. My skills didn\u2019t disappear with the role.'},
+  {t:'Everyone else has it figured out.', r:'I\u2019m comparing my behind-the-scenes to their highlight reel. Plenty of people I admire have stood exactly here.'},
+  {t:'This gap on my resume ruins everything.', r:'A gap is a sentence, not a verdict. I can name what I did with the time and keep moving.'},
+  {t:'I should be further along by now.', r:'There\u2019s no official timetable for this. \u201CShould\u201D is borrowed pressure. I\u2019ll measure by effort, not someone else\u2019s clock.'},
+  {t:'No one\u2019s responding, so I must be the problem.', r:'Silence usually means volume and process, not a judgment of me. I\u2019ll keep refining and keep going.'},
+  {t:'I\u2019m a burden to the people around me.', r:'The people who love me would rather know than watch me struggle alone. Letting them help is a gift to them too.'},
+  {t:'I have nothing to offer right now.', r:'I\u2019m between roles, not out of value. My experience and character came with me.'},
+  {t:'If I were good enough, I\u2019d already be hired.', r:'Hiring is noisy and luck-dependent. Good people wait too. I\u2019ll focus on the inputs I control.'},
+  {t:'I\u2019m too old / too junior for this.', r:'Experience and fresh energy are both assets. The right fit values what I actually bring.'}
+];
+
+const LENSES = [
+  'Write the evidence for and against it. \u201CAlways\u201D and \u201Cnever\u201D rarely survive an honest look. What\u2019s the more accurate, less absolute version?',
+  'If a friend you respect said this exact thing about themselves, what would you tell them? Now say that to yourself. You deserve the same fairness.',
+  'Split it into what you control and what you don\u2019t. Hand the rest back. Pick one thing in your control you can do in the next hour.',
+  'Keep what\u2019s true, drop the cruelty. \u201CThis is hard and I\u2019m doing it anyway\u201D is usually truer than the harsh version your fear wrote.'
+];
+
+const MOODS = [
+  {em:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="9" x2="9.01" y1="10" y2="10"/><line x1="15" x2="15.01" y1="10" y2="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/></svg>', l:'Rough'},{em:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="9" x2="9.01" y1="10" y2="10"/><line x1="15" x2="15.01" y1="10" y2="10"/><path d="M15.5 15.5s-1.3-1.5-3.5-1.5-3.5 1.5-3.5 1.5"/></svg>', l:'Low'},{em:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="9" x2="9.01" y1="10" y2="10"/><line x1="15" x2="15.01" y1="10" y2="10"/><line x1="8" x2="16" y1="15" y2="15"/></svg>', l:'Okay'},{em:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="9" x2="9.01" y1="10" y2="10"/><line x1="15" x2="15.01" y1="10" y2="10"/><path d="M8 14s1.5 1.5 4 1.5 4-1.5 4-1.5"/></svg>', l:'Good'},{em:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="9" x2="9.01" y1="10" y2="10"/><line x1="15" x2="15.01" y1="10" y2="10"/><path d="M8 13s1.5 2.5 4 2.5 4-2.5 4-2.5"/></svg>', l:'Great'}
+];
+
+/* sky gradients keyed to progress 0..7 */
+function skyFor(p){
+  const stops = [
+    ['#1E2A52','#2B3A6B','#3E4E86'],          // 0 - deep calm blue
+    ['#243057','#3E4E86','#5B6B9E'],          // 1
+    ['#2E3A6B','#5B6B9E','#8A6FA0'],          // 2 - blue easing to violet
+    ['#3E4E86','#8A6FA0','#C97E8E'],          // 3 - violet to rose
+    ['#5B6B9E','#C97E8E','#E8896A'],          // 4 - rose to coral
+    ['#8A6FA0','#E89A66','#F2B36A'],          // 5 - warming
+    ['#C98A7E','#F2B36A','#F8CE7E'],          // 6
+    ['#E89A66','#F8CE7E','#FBE3A6']           // 7 - full sunrise (the win)
+  ];
+  const s = stops[Math.max(0,Math.min(7,p))];
+  return `linear-gradient(170deg,${s[0]} 0%,${s[1]} 55%,${s[2]} 100%)`;
+}
+
+/* ---------- STATE ---------- */
+const DAY = 86400000;
+const todayIdx = Math.floor(Date.now()/DAY);
+let state = {
+  name:'', situation:'', focus:[],
+  done:{},                 // {dimKey:true} for today
+  swaps:{},                // {dimKey:offset}
+  aiLessons:{},            // {dimKey:{a,w,t,fin}} personalized "standard" base
+  override:{},             // {dimKey:{...}} difficulty-adjusted version (wins over aiLessons)
+  difficulty:{},           // {dimKey:'easier'|'standard'|'harder'}
+  aiActive:false,
+  tier:'free',             // 'free' | 'plus'
+  billing:'annual',
+  chat:[],                 // [{role:'user'|'assistant', content}]
+  coachChat:[],            // separate history for the elite career coach
+  linkedin:{answers:{}, plan:null, step:-1, aiPlan:false},
+  mood:null,
+  reflections:[],          // {idx, text}
+  history:{}               // {dayIdx: winsCount}
+};
+
+/* seed a little demo history so the journey feels alive */
+(function seed(){
+  const seeds = [ -5, -4, -2, -1 ]; // gaps included on purpose
+  const wins  = [ 3, 5, 2, 6 ];
+  seeds.forEach((d,i)=>{ state.history[todayIdx+d] = wins[i]; });
+})();
+
+/* ---------- HELPERS ---------- */
+const $ = s => document.querySelector(s);
+const ce = (t,c)=>{const e=document.createElement(t); if(c)e.className=c; return e;};
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200);}
+function lessonFor(dim,i){
+  if(state.override[dim.key]) return state.override[dim.key];
+  if(state.aiLessons[dim.key]) return state.aiLessons[dim.key];
+  const off=(state.swaps[dim.key]||0); return dim.items[(todayIdx+i*3+off)%dim.items.length];
+}
+function baseLessonFor(dim,i){
+  if(state.aiLessons[dim.key]) return state.aiLessons[dim.key];
+  const off=(state.swaps[dim.key]||0); return dim.items[(todayIdx+i*3+off)%dim.items.length];
+}
+function isActive(idx){ return (state.history[idx]>0) || state.reflections.some(r=>r.idx===idx); }
+
+/* ============================================================
+   ONBOARDING
+============================================================ */
+const obSteps = [
+  {type:'welcome'},
+  {type:'name'},
+  {type:'situation'},
+  {type:'focus'},
+  {type:'ready'}
+];
+let obi = 0;
+
+function renderOb(){
+  const step = obSteps[obi];
+  const el = $('#obStep');
+  const next = $('#obNext');
+  const skip = $('#obSkip');
+  skip.style.display = 'none';
+  next.disabled = false;
+  next.textContent = 'Continue';
+
+  if(step.type==='welcome'){
+    el.innerHTML = `
+      <div class="ob-eyebrow">Onwards</div>
+      <h1>Something’s in transition.</h1>
+      <p class="lead">Losing a job, or hunting for one, touches everything. Not just the search. Onwards is a daily partner through it. Not a job board. Not a hype machine. Seven small things a day, so you keep showing up for <em>you</em>.</p>
+      <p class="lead" style="margin-top:14px;opacity:.8">Two minutes to set up. Let\u2019s begin.</p>`;
+    next.textContent = 'Get started';
+  }
+  if(step.type==='name'){
+    el.innerHTML = `
+      <div class="ob-eyebrow">Hello</div>
+      <h1>What should we call you?</h1>
+      <div class="field">
+        <label>Your name or a nickname</label>
+        <input type="text" id="obName" placeholder="e.g. Sam" value="${state.name}" autocomplete="off">
+      </div>`;
+    const inp = $('#obName');
+    next.disabled = !inp.value.trim();
+    inp.focus();
+    inp.oninput = ()=>{ state.name = inp.value.trim(); next.disabled = !state.name; };
+    inp.onkeydown = e=>{ if(e.key==='Enter' && state.name) advance(); };
+  }
+  if(step.type==='situation'){
+    const opts = [
+      ['Recently laid off','The ground shifted suddenly.'],
+      ['Job searching','Looking, applying, waiting.'],
+      ['Considering a pivot','Rethinking what\u2019s next.'],
+      ['Burned out & between things','Need to rebuild before the next move.']
+    ];
+    el.innerHTML = `
+      <div class="ob-eyebrow">So we can meet you there</div>
+      <h1>Where are you right now?</h1>
+      <div class="choice-grid">${opts.map(o=>
+        `<button class="choice ${state.situation===o[0]?'sel':''}" data-v="${o[0]}">${o[0]}<span class="sub">${o[1]}</span></button>`).join('')}</div>`;
+    el.querySelectorAll('.choice').forEach(b=>b.onclick=()=>{
+      state.situation=b.dataset.v; el.querySelectorAll('.choice').forEach(x=>x.classList.remove('sel')); b.classList.add('sel'); next.disabled=false;
+    });
+    next.disabled = !state.situation;
+  }
+  if(step.type==='focus'){
+    el.innerHTML = `
+      <div class="ob-eyebrow">Optional</div>
+      <h1>What feels hardest lately?</h1>
+      <p class="lead" style="margin-bottom:18px">Pick any that fit. We\u2019ll still cover all seven areas. This just helps us understand you.</p>
+      <div class="chips">${DIMENSIONS.map(d=>
+        `<button class="chip ${state.focus.includes(d.key)?'sel':''}" data-k="${d.key}">${d.name}</button>`).join('')}</div>`;
+    el.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{
+      const k=b.dataset.k;
+      if(state.focus.includes(k)){state.focus=state.focus.filter(x=>x!==k);b.classList.remove('sel');}
+      else{state.focus.push(k);b.classList.add('sel');}
+    });
+    skip.style.display='block';
+  }
+  if(step.type==='ready'){
+    const first = state.name? state.name : 'friend';
+    el.innerHTML = `
+      <div class="ob-eyebrow">You\u2019re set</div>
+      <h1>Okay, ${first}. Onward, one day at a time.</h1>
+      <p class="lead">Each morning you\u2019ll find seven small practices: body, mind, people, learning, spirit, work, and money. Do what you can. Showing up <em>is</em> the win.</p>
+      <p class="lead" style="margin-top:14px;opacity:.82">When the negative self-talk shows up, the Mind Gym is there to help you answer it.</p>`;
+    next.textContent = 'Open my day';
+  }
+
+  $('#obDots').innerHTML = obSteps.map((_,i)=>`<i class="${i===obi?'on':''}"></i>`).join('');
+}
+function advance(){
+  if(obi < obSteps.length-1){ obi++; renderOb(); }
+  else { startDashboard(); }
+}
+$('#obNext').onclick = advance;
+$('#obSkip').onclick = advance;
+
+/* ============================================================
+   DASHBOARD
+============================================================ */
+function startDashboard(){
+  $('#onboarding').classList.remove('active');
+  $('#dashboard').classList.add('active');
+  $('#fab').style.display='flex';
+  $('#nav').style.display='flex';
+  $('#planPill').onclick=openPaywall;
+  applyTier();
+  window.scrollTo(0,0);
+  buildStars();
+  renderDate();
+  renderGreeting();
+  renderMood();
+  renderCards();
+  renderGym();
+  renderReflections();
+  renderJourney();
+  updateSky();
+}
+
+function buildStars(){
+  const wrap=$('#stars'); wrap.innerHTML='';
+  for(let i=0;i<26;i++){
+    const s=ce('i');
+    s.style.left=Math.random()*100+'%';
+    s.style.top=Math.random()*62+'%';
+    s.style.opacity=(.4+Math.random()*.5);
+    s.style.width=s.style.height=(Math.random()<.2?3:2)+'px';
+    wrap.appendChild(s);
+  }
+}
+function renderDate(){
+  const d=new Date();
+  $('#dateLine').textContent = d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}).toUpperCase();
+}
+function renderGreeting(){
+  const h=new Date().getHours();
+  const part = h<12?'Good morning':h<18?'Good afternoon':'Good evening';
+  const name = state.name? ', '+state.name : '';
+  $('#greetLine').innerHTML = `${part}${name}.`;
+}
+function renderMood(){
+  const row=$('#moodRow'); row.innerHTML='';
+  MOODS.forEach((m,i)=>{
+    const b=ce('button','mood-btn'+(state.mood===i?' sel':''));
+    b.innerHTML=`<span class="em">${m.em}</span><small>${m.l}</small>`;
+    b.onclick=()=>{state.mood=i; renderMood(); toast(moodReply(i));};
+    row.appendChild(b);
+  });
+}
+function moodReply(i){
+  return ['Rough day. Keep it small. One thing is enough.',
+          'Low is okay. Pick one thing and start there.',
+          'Okay works. Let’s build on it.',
+          'Good. Use it. Get one real thing done.',
+          'Strong day. Put it to work while it’s here.'][i];
+}
+
+function doneCount(){ return Object.values(state.done).filter(Boolean).length; }
+
+function renderCards(){
+  const wrap=$('#cards'); wrap.innerHTML='';
+  DIMENSIONS.forEach((dim,i)=>{
+    const L=lessonFor(dim,i);
+    const isDone=!!state.done[dim.key];
+    const lvl=state.difficulty[dim.key]||'standard';
+    const c=ce('div','card'+(isDone?' done':''));
+    c.id='card-'+dim.key;
+    c.style.setProperty('--ac',`var(--c-${dim.key})`);
+    c.style.setProperty('--ac-bg',`color-mix(in srgb, var(--c-${dim.key}) 13%, white)`);
+    c.innerHTML=`
+      <div class="card-top">
+        <div class="icon">${ICONS[dim.key]}</div>
+        <div><div class="dim-name">${dim.name}${state.aiLessons[dim.key]?'<span class="ai-tag">· for you</span>':''}</div><div class="dim-time">${L.t==='\u2014'?'quick':'about '+L.t}</div></div>
+      </div>
+      <div class="action">${L.a}</div>
+      <div class="why">${L.w}</div>
+      ${(L.fin||dim.key==='financial')?'<div class="disclaimer">General wellness content, not financial advice. For decisions about your money, consider a qualified professional.</div>':''}
+      <div class="card-foot">
+        <button class="mark${isDone?' is-done':''}">${isDone?'✓ Done':'Mark done'}</button>
+        <button class="swap">Not today →</button>
+        <button class="help-btn">Unclear?</button>
+      </div>
+      <div class="diff">
+        <span class="diff-label">Make it</span>
+        <button class="diff-pill${lvl==='easier'?' on':''}" data-lvl="easier">Easier</button>
+        <button class="diff-pill${lvl==='standard'?' on':''}" data-lvl="standard">Standard</button>
+        <button class="diff-pill${lvl==='harder'?' on':''}" data-lvl="harder">Harder</button>
+      </div>`;
+    c.querySelector('.mark').onclick=()=>toggleDone(dim.key);
+    c.querySelector('.swap').onclick=()=>{ state.swaps[dim.key]=(state.swaps[dim.key]||0)+1; delete state.aiLessons[dim.key]; delete state.override[dim.key]; delete state.difficulty[dim.key]; delete state.done[dim.key]; renderCards(); updateSky(); };
+    c.querySelector('.help-btn').onclick=()=>openChatWithTask(dim,L);
+    c.querySelectorAll('.diff-pill').forEach(p=>p.onclick=()=>setDifficulty(dim,i,p.dataset.lvl));
+    wrap.appendChild(c);
+  });
+  $('#practiceCount').textContent = `${doneCount()} / 7 done`;
+}
+function toggleDone(key){
+  state.done[key]=!state.done[key];
+  state.history[todayIdx]=doneCount();
+  renderCards(); updateSky(); renderJourney();
+  const n=doneCount();
+  if(state.done[key]){
+    const wb = maybeWelcomeBack();
+    if(n===7) toast('All seven done. That’s the whole day.');
+    else if(wb){/* welcome-back toast already shown */}
+    else if(n===1) toast('That’s one. Keep going.');
+    else toast('That’s '+n+' done.');
+  }
+}
+let welcomed=false;
+function maybeWelcomeBack(){
+  if(welcomed || doneCount()!==1) return false;
+  if(!isActive(todayIdx-1) && computeStreak().streak>1){ welcomed=true; toast('You’re back. Your streak held. Pick up where you left off.'); return true; }
+  return false;
+}
+
+function updateSky(){
+  const n=doneCount();
+  $('#sky').style.background = skyFor(n);
+  $('#pbar').style.width = (n/7*100)+'%';
+  $('#pcount').textContent = n+' of 7';
+  // sun rises from 150px (below horizon) to 18px (risen) as n goes 0->7
+  const y = 150 - (n/7)*132;
+  $('#sun').style.setProperty('--sun-y', y+'px');
+  $('#stars').style.opacity = Math.max(0, 1 - n/4);
+}
+
+/* ---- Mind Gym ---- */
+let gymIdx = Math.floor(Math.random()*GYM.length);
+function renderGym(){
+  $('#gymThought').textContent = GYM[gymIdx].t;
+  $('#gymReframeText').textContent = GYM[gymIdx].r;
+  $('#gymReframe').classList.remove('show');
+  $('#gymReveal').textContent = 'Reframe it';
+}
+$('#gymReveal').onclick=()=>{
+  const r=$('#gymReframe');
+  r.classList.toggle('show');
+  $('#gymReveal').textContent = r.classList.contains('show')?'Hide':'Reframe it';
+};
+$('#gymNew').onclick=()=>{ gymIdx=(gymIdx+1)%GYM.length; renderGym(); };
+$('#gymOwnToggle').onclick=()=>{
+  const o=$('#gymOwn'); o.classList.toggle('show');
+  $('#gymOwnToggle').textContent = o.classList.contains('show')?'Close':'My own thought';
+};
+document.querySelectorAll('.lens').forEach(b=>b.onclick=()=>{
+  const a=$('#lensAnswer'); a.textContent=LENSES[+b.dataset.lens]; a.classList.add('show');
+});
+
+/* ---- Reflection ---- */
+function renderReflections(){
+  const p=$('#reflectPast'); p.innerHTML='';
+  state.reflections.slice(-3).reverse().forEach(r=>{
+    const item=ce('div','past-item');
+    const label = r.idx===todayIdx?'Today':daysAgoLabel(r.idx);
+    item.innerHTML=`<span class="d">${label}</span><span>${r.text}</span>`;
+    p.appendChild(item);
+  });
+}
+function daysAgoLabel(idx){const diff=todayIdx-idx; return diff===1?'Yesterday':diff+'d ago';}
+$('#reflectSave').onclick=saveReflection;
+$('#reflectInput').addEventListener('keydown',e=>{if(e.key==='Enter')saveReflection();});
+function saveReflection(){
+  const v=$('#reflectInput').value.trim(); if(!v)return;
+  state.reflections.push({idx:todayIdx,text:v});
+  if(!state.history[todayIdx]) state.history[todayIdx]=doneCount();
+  $('#reflectInput').value='';
+  renderReflections(); renderJourney();
+  toast('Saved. Worth keeping.');
+}
+
+/* ---- Journey ---- */
+function computeStreak(){
+  // Forgiving model: consecutive active days, but a single missed day is
+  // caught (skipped, not counted, not reset). Two misses in a row ends the run.
+  let d=todayIdx;
+  if(!isActive(d)) d--;            // today is optional until you act
+  let s=0, usedGrace=false;
+  while(true){
+    if(isActive(d)){ s++; d--; continue; }
+    if(isActive(d-1)){ usedGrace=true; d-=2; continue; }  // forgive the single gap
+    break;                                                 // two misses -> end
+  }
+  return {streak:s, usedGrace};
+}
+function renderJourney(){
+  if(doneCount()>0 || state.reflections.some(r=>r.idx===todayIdx)) state.history[todayIdx]=Math.max(state.history[todayIdx]||0,doneCount());
+  const totalWins = Object.values(state.history).reduce((a,b)=>a+b,0);
+  const daysShown = Object.values(state.history).filter(v=>v>0).length;
+  const cs = computeStreak();
+  $('#stStreak').textContent = cs.streak;
+  $('#stWins').textContent = totalWins;
+  $('#stDays').textContent = daysShown;
+
+  const gn=$('#graceNote');
+  if(cs.usedGrace){ gn.style.display='flex'; gn.innerHTML='You missed a day. We didn’t reset you for it.'; }
+  else gn.style.display='none';
+
+  const cal=$('#cal'); cal.innerHTML='';
+  for(let k=13;k>=0;k--){
+    const idx=todayIdx-k;
+    const w=state.history[idx]||0;
+    let cls = w>=5?'a3':w>=3?'a2':w>=1?'a1':'';
+    if(!cls && isActive(idx-1) && isActive(idx+1)) cls='grace';   // a forgiven gap
+    const today = idx===todayIdx?' today':'';
+    cal.innerHTML += `<i class="${cls}${today}"></i>`;
+  }
+}
+
+/* ============================================================
+   ONWARDS+ live AI personalization
+   Generates lessons + reframes via the Anthropic API when running
+   inside the live app. Falls back to the curated library otherwise.
+============================================================ */
+async function callClaude(prompt, maxTokens){
+  const res = await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      model:"claude-sonnet-4-6",
+      max_tokens:maxTokens||1000,
+      messages:[{role:"user",content:prompt}]
+    })
+  });
+  if(!res.ok) throw new Error('http '+res.status);
+  const data = await res.json();
+  return data.content.map(i=>i.type==='text'?i.text:'').join('').trim();
+}
+
+const personalizeBtn=$('#personalizeBtn');
+personalizeBtn.onclick=personalizeDay;
+async function personalizeDay(){
+  if(!requirePlus()) return;
+  personalizeBtn.disabled=true;
+  $('#personalizeLabel').innerHTML='<span class="spin"></span> Writing your day…';
+  document.querySelectorAll('#cards .card').forEach(c=>c.classList.add('skel'));
+
+  const focusTxt = state.focus.length ? state.focus.join(', ') : 'no specific area named';
+  const moodTxt  = state.mood!=null ? MOODS[state.mood].l : 'not shared';
+  const prompt = `You are Onwards, a warm daily wellness companion for someone going through job loss or a difficult job search. Write today's seven micro-practices, one per wellness dimension in this exact order: physical, emotional, social, intellectual, spiritual, occupational, financial.
+
+The person:
+- Name: ${state.name||'(unknown)'}
+- Situation: ${state.situation||'(unknown)'}
+- Areas they find hardest lately: ${focusTxt}
+- Mood today: ${moodTxt}
+
+Each practice must be: a single concrete action they can do today in roughly 20 minutes or less (warm, specific, encouraging, never preachy, no em dashes), plus a one-sentence "why" tied to their situation, plus a short time estimate like "10 min" or "—".
+
+Respond with ONLY a JSON array of exactly 7 objects, no markdown fences, no commentary, in the order listed. Each object: {"key":"physical","action":"...","why":"...","time":"10 min"}`;
+
+  try{
+    let txt = await callClaude(prompt, 1300);
+    txt = txt.replace(/```json|```/g,'').trim();
+    const arr = JSON.parse(txt);
+    const byKey={};
+    arr.forEach(o=>{ if(o&&o.key&&o.action){ byKey[o.key]={a:o.action, w:o.why||'', t:o.time||'\u2014', fin:o.key==='financial'}; }});
+    let ok=0; DIMENSIONS.forEach(d=>{ if(byKey[d.key]){ state.aiLessons[d.key]=byKey[d.key]; ok++; }});
+    if(ok<4) throw new Error('thin response');
+    state.aiActive=true; state.done={};
+    renderCards(); updateSky();
+    $('#personalizeLabel').innerHTML='Personalized for you · tap to rewrite';
+    toast('Today’s practice, written for you.');
+  }catch(e){
+    document.querySelectorAll('#cards .card').forEach(c=>c.classList.remove('skel'));
+    $('#personalizeLabel').innerHTML='Personalize today for me';
+    toast('Live personalization runs in the Onwards app. Showing your curated day for now.');
+  }
+  personalizeBtn.disabled=false;
+}
+
+const gymAiBtn=$('#gymAiBtn');
+gymAiBtn.onclick=async()=>{
+  if(!requirePlus()) return;
+  const thought=$('#gymOwnText').value.trim();
+  if(!thought){ $('#gymOwnText').focus(); return; }
+  const orig=gymAiBtn.innerHTML;
+  gymAiBtn.disabled=true;
+  gymAiBtn.innerHTML='<span class="spin"></span> Thinking with you…';
+  const prompt=`You are a warm, grounded cognitive-reframing coach helping someone going through job loss or a hard job search. They wrote this thought:
+"${thought}"
+
+Reply with a single warm, honest reframe of 2 to 3 sentences. Validate the feeling, gently challenge the distortion, and end on something true and steadying. Speak directly to them using "you". No lists, no preamble. Just the reframe.`;
+  try{
+    const txt=await callClaude(prompt,400);
+    $('#gymAiText').textContent=txt;
+  }catch(e){
+    $('#gymAiText').textContent='Live reframing runs in the Onwards app. For now, try the lenses below. They walk you through the same move yourself.';
+  }
+  $('#gymAiResult').classList.add('show');
+  gymAiBtn.innerHTML=orig; gymAiBtn.disabled=false;
+};
+
+/* ---------- Difficulty: make a task easier or harder ---------- */
+async function setDifficulty(dim,i,level){
+  if((state.difficulty[dim.key]||'standard')===level) return;
+  state.difficulty[dim.key]=level;
+  if(level==='standard'){ delete state.override[dim.key]; renderCards(); updateSky(); return; }
+
+  const base = baseLessonFor(dim,i);
+  const card = document.getElementById('card-'+dim.key);
+  if(card) card.classList.add('skel');
+  const dir = level==='easier'
+    ? 'easier and lower-friction: smaller, gentler, and quicker, so it feels doable on a hard day'
+    : 'more of a stretch: a bit more depth, effort, or time, for a day with more in the tank';
+  const prompt=`Rewrite this daily wellness micro-practice to be ${dir}. Keep the same wellness dimension (${dim.name}) and a warm, encouraging tone for someone navigating job loss.
+Current action: "${base.a}"
+Respond with ONLY JSON, no markdown fences: {"action":"...","why":"...","time":"10 min"}`;
+  try{
+    let txt=await callClaude(prompt,300); txt=txt.replace(/```json|```/g,'').trim();
+    const o=JSON.parse(txt);
+    if(!o.action) throw new Error('thin');
+    state.override[dim.key]={a:o.action, w:o.why||base.w, t:o.time||base.t, fin:dim.key==='financial'};
+  }catch(e){
+    state.override[dim.key]=heuristicScale(base,level,dim);
+  }
+  delete state.done[dim.key];
+  renderCards(); updateSky();
+}
+function heuristicScale(base,level,dim){
+  if(level==='easier'){
+    const a=base.a.charAt(0).toLowerCase()+base.a.slice(1).replace(/\.$/,'');
+    return {a:`Just begin: ${a}. Even two minutes counts as done today.`, w:base.w, t:'2 min', fin:dim.key==='financial'};
+  }
+  return {a:`${base.a.replace(/\.$/,'')}. Then go one step past what feels comfortable.`, w:base.w, t:'20+ min', fin:dim.key==='financial'};
+}
+
+/* ---------- Ask Onwards: the chat coach ---------- */
+const fab=$('#fab'), chatOverlay=$('#chatOverlay');
+let chatCtx='helper';
+function chatHistory(){ return chatCtx==='coach' ? state.coachChat : state.chat; }
+fab.onclick=()=>openChat('helper');
+$('#chatClose').onclick=()=>chatOverlay.classList.remove('show');
+chatOverlay.onclick=e=>{ if(e.target===chatOverlay) chatOverlay.classList.remove('show'); };
+$('#chatSend').onclick=sendChat;
+$('#chatInput').addEventListener('keydown',e=>{ if(e.key==='Enter') sendChat(); });
+
+function openChat(mode){
+  if(!isPlus()){ openPaywall(); return false; }
+  chatCtx = mode || 'helper';
+  $('#chatTitle').textContent = chatCtx==='coach' ? 'Your Career Coach' : 'Ask Onwards';
+  $('#chatAv').innerHTML = chatCtx==='coach' ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>' : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M9.94 14.06A2 2 0 0 0 8.5 12.62L2.37 11a.5.5 0 0 1 0-.97L8.5 8.44A2 2 0 0 0 9.94 7L11.5.87a.5.5 0 0 1 .97 0L14.06 7A2 2 0 0 0 15.5 8.44l6.13 1.59a.5.5 0 0 1 0 .97L15.5 12.6a2 2 0 0 0-1.44 1.44L12.5 20.2a.5.5 0 0 1-.97 0Z"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg>';
+  chatOverlay.classList.add('show');
+  renderChat();
+  if(chatHistory().length===0) renderSuggest(); else $('#chatSuggest').innerHTML='';
+  setTimeout(()=>$('#chatInput').focus(),120);
+  return true;
+}
+function greetingChat(){
+  const n=state.name?(' '+state.name):'';
+  if(chatCtx==='coach'){
+    return `${coachGreetingHook()}I\u2019m your coach. I\u2019ll always give it to you straight, and I\u2019m always in your corner. So let\u2019s get to work: what\u2019s really going on right now?`;
+  }
+  return `Hi${n}. I\u2019m your Onwards coach. Stuck on a task, unsure what something means, or want today tailored to you? Ask away.`;
+}
+function renderSuggest(){
+  const chips = chatCtx==='coach'
+    ? ['Give it to me straight. Am I really trying?','I keep getting rejected','I\u2019ve lost my motivation','Build me a game plan for this week']
+    : ['Where do I even start today?','What should I post on LinkedIn?','Explain index funds simply'];
+  const s=$('#chatSuggest');
+  s.innerHTML=chips.map(c=>`<button>${c}</button>`).join('');
+  s.querySelectorAll('button').forEach(b=>b.onclick=()=>{ $('#chatInput').value=b.textContent; sendChat(); });
+}
+function renderChat(){
+  const m=$('#chatMsgs'); m.innerHTML='';
+  const intro=ce('div','msg bot'); intro.textContent=greetingChat(); m.appendChild(intro);
+  chatHistory().forEach(msg=>{
+    const d=ce('div','msg '+(msg.role==='assistant'?'bot':'user'));
+    d.textContent=msg.content; m.appendChild(d);
+  });
+  m.scrollTop=m.scrollHeight;
+}
+function openChatWithTask(dim,L){
+  if(!openChat('helper')) return;
+  $('#chatInput').value=`I\u2019m not sure about today\u2019s ${dim.name} task: \u201C${L.a}\u201D \u2014 can you help me with it?`;
+  sendChat();
+}
+async function sendChat(){
+  const inp=$('#chatInput'); const text=inp.value.trim(); if(!text) return;
+  inp.value=''; $('#chatSuggest').innerHTML='';
+  chatHistory().push({role:'user',content:text});
+  renderChat();
+  const m=$('#chatMsgs'); const tp=ce('div','typing'); tp.innerHTML='<i></i><i></i><i></i>'; m.appendChild(tp); m.scrollTop=m.scrollHeight;
+  try{
+    const reply=await chatComplete(chatCtx==='coach'?buildElitePersona():buildCoachSystem());
+    tp.remove(); chatHistory().push({role:'assistant',content:reply}); renderChat();
+  }catch(e){
+    tp.remove();
+    const fb = chatCtx==='coach'
+      ? 'I can\u2019t reach you live right now. The coach runs inside the Onwards app. But hear me on this: control what you can control today. Pick one thing that moves you forward and go do it. We talk strategy when I\u2019m back.'
+      : 'I can\u2019t reach the coach right now. The live chat runs inside the Onwards app. In the meantime, every task card has a short \u201Cwhy\u201D underneath that explains what it\u2019s for, and you can tap \u201CEasier\u201D on anything that feels like too much today.';
+    chatHistory().push({role:'assistant',content:fb}); renderChat();
+  }
+}
+function buildCoachSystem(){
+  const tasks=DIMENSIONS.map((d,i)=>`- ${d.name}: ${lessonFor(d,i).a}`).join('\n');
+  return `You are the Onwards coach: a warm, practical, encouraging companion for someone navigating job loss or a difficult job search. Keep replies short (2-5 sentences), concrete, and kind. Write clean and sharp: short sentences, periods over dashes. Help them understand or act on today's practices, explain terms in plain language, and offer one gentle next step. You are not a licensed therapist or financial advisor; for those topics add a brief, light disclaimer and suggest a professional when something sounds serious. Never shame them, and never imply their worth depends on being employed.
+
+The person's name is ${state.name||'unknown'} and their situation is "${state.situation||'unknown'}". Today's seven practices are:
+${tasks}`;
+}
+function buildElitePersona(){
+  return `You are "Coach", a world-class career coach for someone navigating job loss or a hard job search. Your style is modeled on the very best elite head coaches: honest, real, and demanding, but ALWAYS in their corner and ALWAYS believing in them. You hold a high standard because you see their potential, not because you doubt them.
+
+How you coach:
+- Be honest and direct. No empty flattery, no sugarcoating, no corporate hedging. If they're coasting or making excuses, name it. Plainly, and with respect.
+- Hold an elite standard: preparation, discipline, ownership, controlling what you can control, showing up every single day. Process and effort over excuses and outcomes.
+- Make accountability feel like belief, not judgment. You push because you see what they're capable of. Say that part out loud. The standard IS the respect.
+- Earn loyalty the real way: be genuinely in their corner, have their back, make it clear it's "us," not "me vs. you." Their wins matter to you, and you say so. Plainly, without gushing.
+- Care about the person, not just the performance. Notice them. The coaches people love are the ones who truly see them.
+- When they do something well, mean it. Specific, earned praise lands harder than generic hype and makes them hungry to do it again.
+- Be concrete. End with one clear next move, their "assignment", small and doable today. Straight talk, then a step.
+- Keep it short: 3-6 sentences, the way a steady person actually talks. Short sentences, real words. No hype, no cheerleading, no exclamation-point energy. Prefer periods over dashes.
+- The test for every reply: is it true, and does it leave them with a next step and a bit more belief? Never leave them smaller, and never gush.
+- You are not a therapist or financial advisor; for those, give a brief, honest nudge toward a professional.
+
+USE THE FILM. Below is what they've actually been doing in the app. A great coach has watched the tape and references it specifically. Acknowledge real wins, notice drop-offs and patterns, and hold them to what they've already shown they can do. Weave it in naturally; never read the data back like a report.
+
+THEIR RECENT ACTIVITY:
+${buildActivitySnapshot()}
+
+READ THE ROOM. This is the most important rule. This person may be fragile. If they show real distress, hopelessness, deep shame, or any sign of a mental-health crisis, DROP the intensity immediately: be human, gentle, and caring; do not push, challenge, or assign anything; acknowledge how hard it is; and gently encourage them toward real support and people who can help. Tough love is never right for someone in crisis. Never demean or humiliate anyone, and never imply that their worth depends on landing a job.
+
+The person's name is ${state.name||'unknown'} and their situation is "${state.situation||'unknown'}".`;
+}
+function buildActivitySnapshot(){
+  const lines=[];
+  const cs=computeStreak();
+  const totalWins=Object.values(state.history).reduce((a,b)=>a+b,0);
+  const daysShown=Object.values(state.history).filter(v=>v>0).length;
+  lines.push(`- Current streak: ${cs.streak} day(s)${cs.usedGrace?' (a missed day was forgiven to keep it alive)':''}. Days shown up overall: ${daysShown}. Total practices completed: ${totalWins}.`);
+  const doneKeys=DIMENSIONS.filter(d=>state.done[d.key]).map(d=>d.name);
+  const notDone=DIMENSIONS.filter(d=>!state.done[d.key]).map(d=>d.name);
+  lines.push(`- Today: ${doneCount()} of 7 practices done.${doneKeys.length?' Done: '+doneKeys.join(', ')+'.':''}${notDone.length?' Still open: '+notDone.join(', ')+'.':''}`);
+  const pat=[];
+  for(let k=6;k>=0;k--){ const idx=todayIdx-k; const w=state.history[idx]||0; pat.push((k===0?'today':('-'+k+'d'))+':'+w); }
+  lines.push(`- Last 7 days (practices completed per day): ${pat.join(', ')}.`);
+  if(state.mood!=null) lines.push(`- Mood checked in today: ${MOODS[state.mood].l}.`);
+  if(state.reflections && state.reflections.length){ const last=state.reflections.slice(-2).map(r=>'"'+r.text+'"').join('; '); lines.push(`- Recent "one good thing" notes: ${last}.`); }
+  const easier=Object.values(state.difficulty||{}).filter(v=>v==='easier').length;
+  const harder=Object.values(state.difficulty||{}).filter(v=>v==='harder').length;
+  if(easier||harder) lines.push(`- Capacity signal today: made ${easier} task(s) easier, ${harder} harder.`);
+  if(state.linkedin && state.linkedin.plan){ const names=(state.linkedin.plan.pillars||[]).map(p=>p.name).join(', '); lines.push(`- Completed the LinkedIn brand tool. Their content pillars: ${names}.`); }
+  return lines.join('\n');
+}
+function coachGreetingHook(){
+  const cs=computeStreak();
+  const anyHistory=Object.values(state.history).some(v=>v>0);
+  if(doneCount()>=5) return `${doneCount()} of 7 done already today. That\u2019s the standard right there. `;
+  if(cs.streak>=3) return `${cs.streak} days in a row showing up. I see you. `;
+  if(cs.streak===0 && anyHistory) return `It\u2019s been a quiet stretch lately. No judgment. That\u2019s exactly when a coach matters most. `;
+  return '';
+}
+async function chatComplete(systemPrompt){
+  const res=await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      model:"claude-sonnet-4-6", max_tokens:600, system:systemPrompt,
+      messages:chatHistory().map(m=>({role:m.role,content:m.content}))
+    })
+  });
+  if(!res.ok) throw new Error('http '+res.status);
+  const data=await res.json();
+  const out=data.content.map(i=>i.type==='text'?i.text:'').join('').trim();
+  if(!out) throw new Error('empty');
+  return out;
+}
+
+/* ============================================================
+   NAVIGATION + RESOURCES
+============================================================ */
+$('#nav').querySelectorAll('button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+function showTab(tab){
+  $('#dashboard').classList.toggle('active', tab==='today');
+  $('#resources').classList.toggle('active', tab==='resources');
+  $('#nav').querySelectorAll('button').forEach(b=>b.classList.toggle('on', b.dataset.tab===tab));
+  window.scrollTo(0,0);
+  if(tab==='resources') renderResources();
+}
+
+let resState = {screen:'list'};
+function esc(s){ return (s||'').toString().replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function escAttr(s){ return (s||'').toString().replace(/"/g,'&quot;'); }
+
+function renderResources(){
+  if(resState.screen==='linkedin'){ renderLinkedIn(); return; }
+  if(resState.screen==='coach'){ renderCoach(); return; }
+  if(resState.screen==='speak'){ renderSpeak(); return; }
+  const body=$('#resourcesBody'); body.innerHTML='';
+  const cards=[
+    {id:'linkedin', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>',
+      title:'Find your LinkedIn voice', desc:'A guided Q&A to uncover your personal brand and 3–5 content pillars. Then a plan to start posting.', active:true},
+    {id:'coach', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+      title:'Talk to your career coach', desc:'An honest, in-your-corner coach with an elite mindset. Real talk, high standards, and a game plan.', active:true},
+    {id:'speak', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>',
+      title:'Speak with confidence', desc:'A daily 5–10 minute drill, an impromptu challenge, and a library of presentation fundamentals.', active:true},
+    {id:'resume', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>', title:'Refresh your resume', desc:'Turn your experience into sharp, modern bullet points.', active:false},
+    {id:'interview', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>', title:'Practice interviews', desc:'Rehearse your answers and get gentle, useful feedback.', active:false},
+    {id:'network', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>', title:'Reach out with confidence', desc:'Warm-outreach scripts that don\u2019t feel like begging.', active:false}
+  ];
+  const openers={linkedin:openLinkedIn, coach:openCoach, speak:openSpeak};
+  cards.forEach(c=>{
+    const el=ce('div','res-card'+(c.active?'':' soon'));
+    el.innerHTML=`<div class="r-ic">${c.icon}</div>
+      <div style="flex:1"><h3>${c.title}</h3><p>${c.desc}</p></div>
+      ${c.active?'<span class="arrow">→</span>':'<span class="soon-tag">Soon</span>'}`;
+    if(c.active) el.onclick = openers[c.id] || openLinkedIn;
+    body.appendChild(el);
+  });
+}
+
+function openCoach(){ resState.screen='coach'; renderCoach(); }
+function renderCoach(){
+  const body=$('#resourcesBody');
+  body.innerHTML=`<button class="li-back" id="coachBack">← Resources</button>
+    <div class="coach-hero">
+      <div class="coach-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" width="13" height="13" style="vertical-align:-2px;margin-right:6px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Your Career Coach</div>
+      <h2>Straight talk. High standards. In your corner.</h2>
+      <p>This coach shoots straight. Names what\u2019s working, calls out what isn\u2019t, and holds you to a higher standard. Not because you\u2019re failing. Because you\u2019re capable of more, and a great coach never lets you forget it.</p>
+      <div class="coach-tenets">
+        <div><b>Honest</b><span>Real feedback, never empty hype.</span></div>
+        <div><b>Demanding</b><span>High standards. That's the respect.</span></div>
+        <div><b>In your corner</b><span>Has your back, holds you to a real standard.</span></div>
+      </div>
+      <button class="btn-occ" id="coachStart">Start the conversation</button>
+    </div>
+    <div class="coach-quick">
+      <p>Or open with:</p>
+      <button data-q="Give it to me straight. Am I really trying hard enough?">Give it to me straight</button>
+      <button data-q="I keep getting rejected and I\u2019m getting discouraged.">I keep getting rejected</button>
+      <button data-q="Build me a game plan for this week.">Build my game plan for the week</button>
+      <p style="margin-top:14px;font-style:italic;color:var(--muted);line-height:1.5">Your coach can see your real progress: streak, daily practices, and saved plans. So the advice is about you, not generic pep talk.</p>
+    </div>`;
+  $('#coachBack').onclick=()=>{ resState.screen='list'; renderResources(); };
+  $('#coachStart').onclick=()=>openChat('coach');
+  body.querySelectorAll('.coach-quick button').forEach(b=>b.onclick=()=>{ if(!openChat('coach')) return; $('#chatInput').value=b.dataset.q; sendChat(); });
+}
+
+/* ---------- LinkedIn personal-brand Q&A ---------- */
+const LI_QUESTIONS = [
+  {id:'expertise', type:'text', q:'When people come to you for help, what\u2019s it usually about?',
+    hint:'Your go-to strengths, like \u201Cuntangling messy spreadsheets,\u201D \u201Ccalming anxious clients,\u201D \u201Chiring well.\u201D', ph:'I\u2019m the person people ask when…'},
+  {id:'lessons', type:'text', q:'What\u2019s something you\u2019ve learned the hard way at work?',
+    hint:'Hard-won lessons make the most relatable, memorable posts.', ph:'I learned that…'},
+  {id:'energy', type:'text', q:'What could you talk about for an hour with zero prep?',
+    hint:'This often points to a pillar hiding in plain sight. Work or not.', ph:'Get me started on…'},
+  {id:'known', type:'text', q:'In your next chapter, what do you want to be known for?',
+    hint:'The reputation you\u2019re building toward.', ph:'I want to be known as someone who…'},
+  {id:'hobbies', type:'multi', q:'Outside of work, what are you into?',
+    hint:'Pick any that fit. Your personality is part of your brand.',
+    options:['Fitness & health','Parenting & family','Cooking & food','Gaming','Music','Travel','Reading & books','Mentoring & coaching','Building side projects','Faith & spirituality','Volunteering','Art & design','Sports','The outdoors']},
+  {id:'audience', type:'multi', q:'Who do you most want to reach?',
+    hint:'Choose one or two. It shapes your voice.',
+    options:['Hiring managers & recruiters','Peers in my field','People earlier in their careers','My industry, broadly','Others navigating a career change','Potential clients or customers']},
+  {id:'openness', type:'single', q:'How open do you want to be about your job search?',
+    hint:'There\u2019s no wrong answer. This is about your comfort.',
+    options:['Very open: share the ups and downs','Selective: lessons, not status updates','Professional only: keep it about the work']}
+];
+
+function openLinkedIn(){
+  resState.screen='linkedin';
+  state.linkedin.step = state.linkedin.plan ? 'plan' : -1;
+  renderLinkedIn();
+}
+function liExit(){ resState.screen='list'; renderResources(); }
+function saveLiAnswer(Q){ if(Q.type==='text'){ const el=$('#liInput'); if(el) state.linkedin.answers[Q.id]=el.value.trim(); } }
+
+function renderLinkedIn(){
+  const body=$('#resourcesBody');
+  const li=state.linkedin;
+  let html='<button class="li-back" id="liBack">← Resources</button>';
+
+  if(li.step===-1){
+    html+=`<div class="q-card">
+      <div class="q-eyebrow">LinkedIn · Personal brand</div>
+      <h2>Let\u2019s find your voice.</h2>
+      <p class="q-hint" style="font-size:14.5px;color:var(--ink-soft)">Posting on LinkedIn gets a lot easier when you\u2019re not starting from a blank page every time. In a few short questions, we\u2019ll uncover your <b>content pillars</b>: 3 to 5 themes that are genuinely yours, drawn from your career, your story, and what you love. You\u2019ll leave with a simple plan to start writing.</p>
+      <div class="q-nav"><span style="flex:1"></span><button class="btn-occ" id="liStart">Start →</button></div>
+    </div>`;
+    body.innerHTML=html;
+    $('#liBack').onclick=liExit;
+    $('#liStart').onclick=()=>{ li.step=0; renderLinkedIn(); };
+    return;
+  }
+  if(li.step==='gen'){
+    html+=`<div class="q-card" style="text-align:center;padding:44px 20px">
+      <div class="spin" style="width:28px;height:28px;border-width:3px;margin:0 auto 16px"></div>
+      <h2 style="font-size:21px">Building your plan…</h2>
+      <p class="q-hint" style="margin-bottom:0">Turning your answers into pillars and post ideas.</p></div>`;
+    body.innerHTML=html;
+    $('#liBack').onclick=liExit;
+    return;
+  }
+  if(li.step==='plan'){
+    body.innerHTML=html+renderLiPlanHTML();
+    $('#liBack').onclick=liExit;
+    wireLiPlan();
+    return;
+  }
+
+  // a question
+  const idx=li.step, Q=LI_QUESTIONS[idx], saved=li.answers[Q.id];
+  let input='';
+  if(Q.type==='text'){
+    input=`<textarea class="q-text" id="liInput" placeholder="${escAttr(Q.ph)}">${esc(saved)}</textarea>`;
+  } else {
+    const sel = Array.isArray(saved)?saved:(saved?[saved]:[]);
+    input=`<div class="q-chips">${Q.options.map(o=>`<button class="q-chip${sel.includes(o)?' sel':''}" data-o="${escAttr(o)}">${o}</button>`).join('')}</div>`;
+  }
+  const last = idx===LI_QUESTIONS.length-1;
+  html+=`<div class="q-card">
+    <div class="q-eyebrow">Question ${idx+1} of ${LI_QUESTIONS.length}</div>
+    <h2>${Q.q}</h2>
+    <p class="q-hint">${Q.hint}</p>
+    ${input}
+    <div class="q-nav">
+      ${idx===0?'<span style="width:54px"></span>':'<button class="btn-ghost" id="liPrev">← Back</button>'}
+      <div class="q-dots">${LI_QUESTIONS.map((_,k)=>`<i class="${k===idx?'on':''}"></i>`).join('')}</div>
+      <button class="btn-occ" id="liNext">${last?'Build my plan':'Continue'}</button>
+    </div></div>`;
+  body.innerHTML=html;
+  $('#liBack').onclick=()=>{ saveLiAnswer(Q); liExit(); };
+
+  if(Q.type!=='text'){
+    body.querySelectorAll('.q-chip').forEach(ch=>ch.onclick=()=>{
+      const o=ch.dataset.o;
+      let cur=Array.isArray(li.answers[Q.id])?li.answers[Q.id]:[];
+      if(Q.type==='single') cur=[o];
+      else cur=cur.includes(o)?cur.filter(x=>x!==o):[...cur,o];
+      li.answers[Q.id]=cur;
+      body.querySelectorAll('.q-chip').forEach(x=>x.classList.toggle('sel', cur.includes(x.dataset.o)));
+    });
+  }
+  const prev=$('#liPrev'); if(prev) prev.onclick=()=>{ saveLiAnswer(Q); li.step=idx-1; renderLinkedIn(); };
+  $('#liNext').onclick=()=>{ saveLiAnswer(Q); if(last){ li.step='gen'; renderLinkedIn(); generateLinkedInPlan(); } else { li.step=idx+1; renderLinkedIn(); } };
+}
+
+async function generateLinkedInPlan(){
+  const a=state.linkedin.answers;
+  if(!isPlus()){ state.linkedin.plan=fallbackPlan(a); state.linkedin.aiPlan=false; state.linkedin.step='plan'; renderLinkedIn(); return; }
+  const prompt=`You are a warm LinkedIn personal-brand coach helping someone (often navigating a job change) find their voice and a sustainable posting plan. From their answers, identify 3 to 5 "content pillars", recurring themes they can post about, spanning career, personal, and hobby as fits them. Make it specific to THEM, echoing their own words.
+
+Their answers:
+- People come to them for: ${a.expertise||'(blank)'}
+- Learned the hard way: ${a.lessons||'(blank)'}
+- Could talk for an hour about: ${a.energy||'(blank)'}
+- Wants to be known for: ${a.known||'(blank)'}
+- Hobbies/interests: ${(a.hobbies||[]).join(', ')||'(none picked)'}
+- Wants to reach: ${(a.audience||[]).join(', ')||'(unspecified)'}
+- Openness about job search: ${a.openness||'(unspecified)'}
+
+Return ONLY JSON, no markdown fences:
+{"summary":"1-2 warm sentences naming their emerging brand","pillars":[{"name":"short pillar name","description":"one sentence on what they'd post here and why it fits them","examples":["a concrete post idea","another concrete post idea"]}],"cadence":"a realistic, gentle posting rhythm","firstPost":"a specific, low-pressure idea for their very first post"}
+
+Make 3 to 5 pillars. Keep everything encouraging and concrete.`;
+  try{
+    let txt=await callClaude(prompt,1500); txt=txt.replace(/```json|```/g,'').trim();
+    const o=JSON.parse(txt);
+    if(!o.pillars || o.pillars.length<2) throw new Error('thin');
+    state.linkedin.plan=o; state.linkedin.aiPlan=true;
+  }catch(e){
+    state.linkedin.plan=fallbackPlan(a); state.linkedin.aiPlan=false;
+  }
+  state.linkedin.step='plan'; renderLinkedIn();
+}
+
+function trimClause(s){ s=(s||'').trim().replace(/[.!?]+$/,''); return s.length>88?s.slice(0,88)+'…':s; }
+function fallbackPlan(a){
+  const pillars=[];
+  if(a.expertise) pillars.push({name:'Your craft', description:`The work you know inside out: ${trimClause(a.expertise)}. Teaching it positions you as the expert you already are.`, examples:[`A short how-to drawn from \u201C${trimClause(a.expertise)}\u201D`, 'One thing beginners in your field always get wrong']});
+  if(a.lessons) pillars.push({name:'Lessons the hard way', description:`Honest reflections like \u201C${trimClause(a.lessons)}\u201D land because they\u2019re real.`, examples:['Tell the story behind a mistake and what it taught you', '\u201CWhat I wish I\u2019d known earlier in my career\u201D']});
+  if(a.energy) pillars.push({name:'What lights you up', description:`The subject you never run out of: ${trimClause(a.energy)}.`, examples:[`A strong, friendly opinion about ${trimClause(a.energy)}`, `Why ${trimClause(a.energy)} matters more than people think`]});
+  if(a.hobbies&&a.hobbies.length){ const h=a.hobbies[0]; pillars.push({name:`Beyond work: ${h}`, description:`A glimpse of the human behind the resume: ${h.toLowerCase()} makes you relatable and memorable.`, examples:[`A lesson ${h.toLowerCase()} taught you that applies to work`, `Your current ${h.toLowerCase()} goal or project`]}); }
+  if(a.openness && a.openness.indexOf('Very open')===0) pillars.push({name:'The search, out loud', description:'Sharing the real story of finding your next role builds trust, and surfaces opportunities.', examples:['What this week of searching taught you', 'A clear, specific ask: the role and the people you\u2019re looking for']});
+  const generic=[
+    {name:'Your point of view', description:'Short takes on news and trends in your field keep you visible and current.', examples:['React to a recent change in your industry','Share an article with your honest take']},
+    {name:'Wins & gratitude', description:'Celebrating progress, yours and others\u2019, makes your feed a place people want to be.', examples:['Thank someone who helped you recently','Share a small win from this week']}
+  ];
+  let gi=0; while(pillars.length<3 && gi<generic.length) pillars.push(generic[gi++]);
+  return {
+    summary:`You\u2019re building a voice around ${a.known?trimClause(a.known):'what you do best'}${a.audience&&a.audience.length?`, speaking to ${a.audience[0].toLowerCase()}`:''}. These pillars give you something to say without staring at a blank page.`,
+    pillars:pillars.slice(0,5),
+    cadence:'Start gentle: two short posts a week. Rotate through your pillars so it never feels repetitive. Consistency beats perfection.',
+    firstPost: a.lessons ? `Open with the lesson you named: \u201C${trimClause(a.lessons)}.\u201D Tell the quick story behind it and what changed for you.` : 'Introduce yourself: who you help, what you\u2019re looking for next, and one useful thing you\u2019ve learned along the way.'
+  };
+}
+
+function renderLiPlanHTML(){
+  const p=state.linkedin.plan;
+  const colors=['--c-occupational','--c-intellectual','--c-physical','--c-emotional','--c-financial'];
+  let h=`<div class="plan-summary"><div class="pl">Your emerging brand</div><p>${esc(p.summary)}</p></div>`;
+  h+=`<div class="section-label" style="margin:4px 4px 12px"><h2 style="font-size:20px">Your content pillars</h2><span>${p.pillars.length} pillars</span></div>`;
+  p.pillars.forEach((pil,i)=>{
+    h+=`<div class="pillar" style="--pc:var(${colors[i%colors.length]})">
+      <div class="pn"><div class="num">${i+1}</div><h3>${esc(pil.name)}</h3></div>
+      <div class="pd">${esc(pil.description)}</div>
+      <div class="ex">Post ideas</div>
+      <ul>${(pil.examples||[]).map(e=>`<li>${esc(e)}</li>`).join('')}</ul></div>`;
+  });
+  h+=`<div class="plan-extra">
+    <h4>Your rhythm</h4><div class="pe-body">${esc(p.cadence)}</div>
+    <h4>Your first post</h4><div class="pe-body" style="margin-bottom:0">${esc(p.firstPost)}</div>
+    <div class="plan-actions">
+      <button class="btn-occ" id="liCopy">Copy my plan</button>
+      <button class="btn-ghost" id="liAsk">Help me write it</button>
+      <button class="btn-ghost" id="liRedo">Start over</button>
+    </div></div>`;
+  if(!state.linkedin.aiPlan) h+= isPlus()
+    ? `<p style="font-size:12px;color:var(--muted);text-align:center;margin-top:14px;font-style:italic">Built from your answers. (AI tailoring was unavailable just now.)</p>`
+    : `<button class="upsell">✦ Want pillars written for you by AI? Get Onwards+</button>`;
+  return h;
+}
+function planToText(){
+  const p=state.linkedin.plan;
+  let t='MY LINKEDIN CONTENT PILLARS\n\n'+(p.summary||'')+'\n';
+  p.pillars.forEach((pil,i)=>{ t+=`\n${i+1}. ${pil.name}\n   ${pil.description||''}\n`; (pil.examples||[]).forEach(e=>t+='   • '+e+'\n'); });
+  t+=`\nRhythm: ${p.cadence||''}\nFirst post: ${p.firstPost||''}\n`;
+  return t;
+}
+function wireLiPlan(){
+  $('#liCopy').onclick=()=>{ try{navigator.clipboard.writeText(planToText());}catch(e){} toast('Plan copied. Now go write it.'); };
+  $('#liRedo').onclick=()=>{ state.linkedin={answers:{},plan:null,step:-1,aiPlan:false}; renderLinkedIn(); };
+  $('#liAsk').onclick=()=>{ if(!openChat('helper')) return; $('#chatInput').value='Help me write my first LinkedIn post from my content pillars.'; sendChat(); };
+}
+
+/* ============================================================
+   SPEAK WITH CONFIDENCE resource
+============================================================ */
+let speakState = {tab:'drill', drillIdx:null, currentPrompt:null};
+
+const DRILLS = [
+  {cat:'Warm-up', time:'5 min', title:'Articulation reps', steps:['Pick three tongue twisters (e.g. \u201Cred leather, yellow leather\u201D).','Say each one slowly and clearly 5 times, then speed up.','Over-pronounce every consonant. Exaggerate on purpose.'], tip:'Crisp articulation makes you sound more confident than volume ever will.'},
+  {cat:'Voice', time:'5 min', title:'The power of the pause', steps:['Read a short paragraph out loud.','Replace every rushed moment or \u201Cum\u201D with a silent 2-second pause.','Notice how the pause makes you sound more in control.'], tip:'A pause feels like forever to you and like confidence to your listener.'},
+  {cat:'Filler words', time:'5 min', title:'Um-buster', steps:['Pick a topic you know well.','Talk about it for 90 seconds straight.','Every time you catch an \u201Cum,\u201D \u201Cuh,\u201D or \u201Clike,\u201D pause instead. Run it again and beat your count.'], tip:'You can\u2019t kill filler words by trying harder. Replace them with silence.'},
+  {cat:'Impromptu', time:'5 min', title:'60-second impromptu', steps:['Tap \u201CGive me a topic\u201D below.','Take 10 seconds to choose ONE point.','Speak for 60 seconds using P-R-E-P: Point, Reason, Example, Point.'], tip:'Don\u2019t aim for perfect. Aim for a clear point and a clean finish.'},
+  {cat:'Structure', time:'5 min', title:'Open–point–close', steps:['Pick any everyday topic.','Write one sentence to open, one clear point, one sentence to close.','Deliver all three out loud as a 30-second mini-speech.'], tip:'Most rambling comes from no structure. Three sentences fixes it.'},
+  {cat:'Vocal variety', time:'5 min', title:'Pace & pitch', steps:['Read a paragraph in a flat monotone.','Read it again: slow the important parts, speed up the rest, raise and lower your pitch.','Hear the difference.'], tip:'Monotone loses people. Variety keeps them leaning in.'},
+  {cat:'Body language', time:'5 min', title:'Stance & hands', steps:['Stand tall, feet shoulder-width, weight even.','Talk for a minute with hands resting at your sides, gesturing only to emphasize.','Record a few seconds on your phone and watch it back.'], tip:'Stillness reads as confidence; fidgeting reads as nerves.'},
+  {cat:'Storytelling', time:'10 min', title:'The 90-second story', steps:['Pick a small real moment from your week.','Tell it out loud with a beginning, a turn, and a point.','Now trim it. Tell it again in 60 seconds, keeping only what matters.'], tip:'A story with a point beats a list of facts every time.'},
+  {cat:'Eye contact', time:'5 min', title:'Anchor points', steps:['Imagine three people in different parts of a room.','Deliver a short message, holding \u201Ceye contact\u201D with one at a time for a full sentence.','No darting. Land on one, finish the thought, move on.'], tip:'Eye contact one thought at a time feels personal and looks composed.'},
+  {cat:'Confidence', time:'5 min', title:'Posture + breath', steps:['Stand tall for two minutes, shoulders back, chin level.','Take five slow breaths, exhaling longer than you inhale.','Say your name and one sentence about yourself out loud, like you mean it.'], tip:'Your body sets your voice. Settle the body, steady the voice.'},
+  {cat:'Clarity', time:'5 min', title:'Explain it to a 10-year-old', steps:['Pick something from your field.','Explain it out loud as if to a curious 10-year-old. No jargon.','If you used a buzzword, start over.'], tip:'If you can make it simple, you truly understand it, and interviews love that.'},
+  {cat:'Impromptu', time:'5 min', title:'The 3-word spark', steps:['Have someone give you three random, unrelated words.','Speak for 60 seconds connecting all three into one point.','Have fun. Looseness is a skill too.'], tip:'Improv builds the muscle that saves you when a meeting goes off-script.'},
+  {cat:'Openers', time:'5 min', title:'Strong first 10 seconds', steps:['Take any topic.','Write and say three different openers: a question, a bold statement, and a quick story.','Pick the one that grabs you most.'], tip:'You win or lose the room in the first 10 seconds. Rehearse them.'},
+  {cat:'Voice', time:'5 min', title:'Slow it down', steps:['Pick a paragraph.','Read it 30% slower than feels natural.','Add a real pause at every period and comma.'], tip:'Nervous speakers rush. Slowing down is the fastest confidence upgrade there is.'}
+];
+
+const LESSONS = [
+  {title:'Beat the nerves', summary:'Nerves aren\u2019t a sign you\u2019re failing. They\u2019re energy. The goal isn\u2019t to remove them, it\u2019s to channel them.', points:['Reframe the adrenaline as fuel, not fear. Your body reacts the same way to excitement.','Know your open and close cold; certainty at the edges calms everything in between.','Slow your exhale before you start. It signals your body that you\u2019re safe.','Put your focus on the message and the listener, not on yourself.'], tip:'Even elite speakers feel it. They\u2019ve just learned to ride it.'},
+  {title:'Structure that sticks', summary:'Clear structure is what separates a confident speaker from a rambler. Give your ideas a frame.', points:['Open, point, close: tell them what\u2019s coming, make the point, land it.','Use the rule of three: three points, three examples. The mind loves threes.','Signpost transitions: \u201Cfirst\u2026 second\u2026 finally\u2026\u201D','Pick ONE core message. If they remember one thing, what is it?'], tip:'No structure is the #1 cause of rambling. A frame fixes it instantly.'},
+  {title:'Kill the filler words', summary:'\u201CUm,\u201D \u201Cuh,\u201D and \u201Clike\u201D leak confidence. The fix isn\u2019t effort. It\u2019s the pause.', points:['Build awareness first. You can\u2019t fix what you don\u2019t notice. Record yourself.','Replace every filler with a silent pause; silence sounds like control.','Slow down. Fillers multiply when you rush.','Finish your sentence, then breathe before the next one.'], tip:'A two-second silence feels huge to you and invisible to them.'},
+  {title:'Vocal variety', summary:'How you say it matters as much as what you say. Your voice is an instrument. Play it.', points:['Vary your pace: slow down for important ideas, speed up for momentum.','Use the pause as punctuation before and after key points.','Move your pitch up and down. Monotone is the enemy.','Adjust volume for emphasis instead of shouting through.'], tip:'The most boring content comes alive with vocal variety.'},
+  {title:'Command the room with your body', summary:'Your audience reads your body before they hear your words. Make it say \u201Cconfident.\u201D', points:['Stand tall and grounded; take up your space.','Gesture with purpose to emphasize. Don\u2019t fidget.','Hold eye contact one full thought at a time.','Let yourself smile; warmth is disarming and magnetic.'], tip:'Confidence is something your body does first and your mind catches up to.'},
+  {title:'Tell a story', summary:'Facts inform; stories move. A simple structure turns any point into something memorable.', points:['Use the spine: situation \u2192 complication \u2192 resolution \u2192 the point.','Use specific, concrete details. They make it real.','Let a little emotion in; that\u2019s what people remember.','Always land the point. A story without a point is just an anecdote.'], tip:'In an interview, a 60-second story beats five minutes of claims.'},
+  {title:'Think fast: impromptu speaking', summary:'Being put on the spot is a skill, not a talent. A simple formula keeps you calm and clear.', points:['Use P-R-E-P: Point, Reason, Example, Point.','Buy a beat gracefully: \u201CGreat question, the way I see it\u2026\u201D','Make ONE point well rather than three points badly.','Finish clean and stop. Don\u2019t trail off apologizing.'], tip:'You\u2019ll rarely be judged on perfection. Only on whether you had a point.'},
+  {title:'Strong opens & closes', summary:'People remember how you start and how you finish. Engineer both on purpose.', points:['Open with a hook: a question, a bold line, a surprising fact, or a short story.','Tell them where you\u2019re taking them so they can follow.','Close by circling back to your one core message.','End on a line, not a shrug. Never finish with \u201Cyeah, so, that\u2019s it.\u201D'], tip:'Write your last sentence first. Knowing your landing makes the whole thing braver.'}
+];
+
+const IMPROMPTU_PROMPTS = [
+  'What\u2019s a skill you think everyone should learn, and why?',
+  'Describe a place that always makes you feel calm.',
+  'If you could give your younger self one piece of advice, what would it be?',
+  'What\u2019s the best decision you\u2019ve ever made?',
+  'Convince me to try your favorite hobby.',
+  'What does success mean to you?',
+  'Tell me about someone who changed your life.',
+  'What\u2019s a small thing that makes a big difference?',
+  'If you could fix one problem in the world, what would it be?',
+  'What\u2019s something you\u2019ve completely changed your mind about?',
+  'Describe your perfect ordinary day.',
+  'What\u2019s a lesson that failure taught you?',
+  'Why should someone hire you?',
+  'What\u2019s overrated, and what\u2019s underrated?',
+  'Tell me about a time you were proud of yourself.',
+  'What would you do with one extra hour every day?',
+  'What\u2019s the best advice you\u2019ve ever received?',
+  'If this past week were a movie, what genre would it be?'
+];
+
+function openSpeak(){ resState.screen='speak'; renderSpeak(); }
+function renderSpeak(){
+  const body=$('#resourcesBody');
+  body.innerHTML=`<button class="li-back" id="speakBack">← Resources</button>
+    <div class="r-tabs">
+      <button class="${speakState.tab==='drill'?'on':''}" data-t="drill">Daily drill</button>
+      <button class="${speakState.tab==='library'?'on':''}" data-t="library">Skill library</button>
+    </div><div id="speakBody"></div>`;
+  $('#speakBack').onclick=()=>{ resState.screen='list'; renderResources(); };
+  body.querySelectorAll('.r-tabs button').forEach(b=>b.onclick=()=>{ speakState.tab=b.dataset.t; renderSpeak(); });
+  if(speakState.tab==='drill') renderSpeakDrill(); else renderSpeakLibrary();
+}
+function renderSpeakDrill(){
+  const wrap=$('#speakBody'); if(!wrap) return;
+  if(speakState.drillIdx==null) speakState.drillIdx=todayIdx%DRILLS.length;
+  const d=DRILLS[speakState.drillIdx];
+  wrap.innerHTML=`
+    <div class="q-card">
+      <div class="q-eyebrow">${esc(d.cat)} · ${esc(d.time)}</div>
+      <h2 style="font-size:21px;margin-top:8px">${esc(d.title)}</h2>
+      <ol class="drill-steps">${d.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>
+      <div class="tip"><b>Coach\u2019s tip:</b> ${esc(d.tip)}</div>
+      <div class="q-nav" style="margin-top:18px">
+        <button class="btn-ghost" id="drillAnother">↻ Another drill</button>
+        <span style="flex:1"></span>
+        <button class="btn-occ" id="drillDone">Mark practiced</button>
+      </div>
+    </div>
+    <div class="impromptu">
+      <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" width="17" height="17" style="vertical-align:-3px;margin-right:7px;"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg>Impromptu challenge</h4>
+      <p class="sub">The fastest way to get comfortable on your feet. Tap for a surprise topic, then speak for a full 60 seconds.</p>
+      <div class="impromptu-prompt" id="impPrompt"></div>
+      <div class="imp-btns">
+        <button class="imp-btn" id="impNew">Give me a topic</button>
+        <button class="imp-btn ghost" id="impCoachToggle">Coach my answer</button>
+      </div>
+      <div class="imp-feedback" id="impFeedback">
+        <textarea id="impAnswer" rows="3" placeholder="Type roughly what you said, and I\u2019ll give you quick feedback…"></textarea>
+        <div class="imp-btns" style="margin-top:10px"><button class="imp-btn" id="impSubmit">Get feedback</button></div>
+        <div class="imp-result" id="impResult"></div>
+      </div>
+    </div>`;
+  $('#drillAnother').onclick=()=>{ speakState.drillIdx=(speakState.drillIdx+1)%DRILLS.length; renderSpeakDrill(); };
+  $('#drillDone').onclick=()=>toast('Reps in the bank. That’s how it’s built.');
+  $('#impNew').onclick=()=>{ const p=IMPROMPTU_PROMPTS[Math.floor(Math.random()*IMPROMPTU_PROMPTS.length)]; speakState.currentPrompt=p; const el=$('#impPrompt'); el.textContent=p; el.classList.add('show'); };
+  $('#impCoachToggle').onclick=()=>{ $('#impFeedback').classList.toggle('show'); if(!speakState.currentPrompt) $('#impNew').click(); };
+  $('#impSubmit').onclick=impFeedback;
+}
+async function impFeedback(){
+  const ans=$('#impAnswer').value.trim(); if(!ans){ $('#impAnswer').focus(); return; }
+  const res=$('#impResult');
+  if(!isPlus()){
+    res.innerHTML='<div>Quick self-check: did you make ONE clear point? Cut filler with pauses, and finish on a strong line instead of trailing off. Run it again with P-R-E-P: Point, Reason, Example, Point.</div><button class="upsell" style="background:#FBD98A;border:none;color:#216158;margin-top:12px">✦ Get personal AI feedback with Onwards+</button>';
+    res.classList.add('show'); return;
+  }
+  const btn=$('#impSubmit'); const orig=btn.textContent; btn.disabled=true; btn.innerHTML='<span class="spin" style="border-top-color:#216158"></span>';
+  const prompt=`You are a supportive, encouraging public-speaking coach. The speaker gave a ~60-second impromptu answer to the topic: "${speakState.currentPrompt||'a surprise topic'}". Here is roughly what they said, typed from memory: "${ans}". Give brief feedback in 3-4 sentences: name one genuine strength, one specific thing to tighten (structure, clarity, filler words, or a stronger finish), and end with a one-line challenge for next time. Warm and concrete. Never harsh, never generic.`;
+  try{ const t=await callClaude(prompt,400); res.textContent=t; }
+  catch(e){ res.textContent='Live feedback runs in the Onwards app. Quick self-check: did you make ONE clear point? Cut filler with pauses, and finish on a strong line instead of trailing off.'; }
+  res.classList.add('show'); btn.disabled=false; btn.textContent=orig;
+}
+function renderSpeakLibrary(){
+  const wrap=$('#speakBody'); if(!wrap) return;
+  let h='<p style="font-size:13px;color:var(--ink-soft);margin:0 4px 16px;line-height:1.5">Short, practical lessons on the fundamentals. Read one, then put it to work in today\u2019s drill.</p>';
+  LESSONS.forEach(l=>{
+    h+=`<div class="lesson"><h3>${esc(l.title)}</h3><div class="ls">${esc(l.summary)}</div><ul>${l.points.map(p=>`<li>${esc(p)}</li>`).join('')}</ul><div class="tip"><b>Tip:</b> ${esc(l.tip)}</div></div>`;
+  });
+  h+=`<div class="dir-group" style="margin-top:10px"><h3>Practice with real people</h3>
+    <a class="dir-item" href="https://www.toastmasters.org/find-a-club" target="_blank" rel="noopener"><div class="di-top"><h4>Toastmasters International</h4><span class="di-free">Visit free</span><span class="di-go">↗</span></div><p>The gold standard for learning to speak. Find a local or online club and practice in a supportive room. Guests can usually attend a few meetings before deciding to join.</p></a></div>
+    <p style="font-size:11.5px;color:var(--muted);text-align:center;margin-top:4px;font-style:italic">Link opens an external site. Onwards isn\u2019t affiliated with Toastmasters.</p>`;
+  wrap.innerHTML=h;
+}
+
+/* ============================================================
+   TIERS: free vs Onwards+
+============================================================ */
+function isPlus(){ return state.tier==='plus'; }
+function requirePlus(){ if(isPlus()) return true; openPaywall(); return false; }
+function applyTier(){
+  const pill=$('#planPill'); if(pill) pill.textContent = isPlus()?'Onwards+ ✦':'Upgrade ✦';
+  const pl=$('#personalizeLabel'); if(pl) pl.innerHTML = isPlus()?'Personalize today for me':'🔒 Personalize today · Onwards+';
+}
+function setTier(t){ state.tier=t; applyTier(); if($('#resources') && $('#resources').classList.contains('active')) renderResources(); }
+
+const PLUS_BENEFITS = [
+  ['Your day, personalized','AI writes your seven daily practices around your situation, focus, and mood.'],
+  ['Your AI Career Coach','Honest, in-your-corner coaching that knows your real progress, anytime.'],
+  ['Ask Onwards, anytime','A helper that understands your day and answers whatever you\u2019re stuck on.'],
+  ['AI-tailored plans','LinkedIn pillars, skills translation, and resume lines written for you, not from a template.'],
+  ['Mind Gym reframes','Turn the exact thought weighing on you into a steadier one, with AI.']
+];
+const COMPARE = [
+  ['Daily practices & streak','✓','✓'],
+  ['Mind Gym (reframes & lenses)','✓','✓'],
+  ['Resource libraries & tools','✓','✓'],
+  ['Guided plans (structured)','✓','✓'],
+  ['AI-personalized daily plan','—','✓'],
+  ['AI Career Coach + Ask Onwards','—','✓'],
+  ['AI-tailored resource plans','—','✓']
+];
+
+const planOverlay=$('#planOverlay');
+planOverlay.onclick=e=>{ if(e.target===planOverlay) closePaywall(); };
+function openPaywall(){ renderPlanSheet(); planOverlay.classList.add('show'); }
+function closePaywall(){ planOverlay.classList.remove('show'); }
+
+function renderPlanSheet(){
+  const sheet=$('#planSheet');
+  if(isPlus()){
+    sheet.innerHTML=`
+      <div class="plan-hero" style="background:linear-gradient(160deg,#2C7A6F,#3E9B8E)">
+        <button class="x" id="planX">×</button>
+        <div class="pk">Your plan</div>
+        <h2>You\u2019re on Onwards+ ✦</h2>
+        <p>You’ve got the full Onwards: the coach, personalized days, and tailored plans.</p>
+      </div>
+      <div class="plan-body">
+        ${PLUS_BENEFITS.map(b=>`<div class="benefit"><span class="bi">✦</span><div><b>${b[0]}</b><span>${b[1]}</span></div></div>`).join('')}
+        <div class="plan-manage" id="planDowngrade">Switch back to Free (demo)</div>
+      </div>`;
+    $('#planX').onclick=closePaywall;
+    $('#planDowngrade').onclick=()=>{ setTier('free'); closePaywall(); toast('Switched to Free. For testing.'); };
+    return;
+  }
+  const monthly = planSel==='monthly';
+  sheet.innerHTML=`
+    <div class="plan-hero">
+      <button class="x" id="planX">×</button>
+      <div class="pk">Onwards+</div>
+      <h2>A coach in your corner.</h2>
+      <p>Onwards+ writes your day around you, and gives you someone to talk to when you need it. No hype. Just more help, when you want it.</p>
+    </div>
+    <div class="plan-body">
+      ${PLUS_BENEFITS.map(b=>`<div class="benefit"><span class="bi">✦</span><div><b>${b[0]}</b><span>${b[1]}</span></div></div>`).join('')}
+      <div class="plan-options">
+        <div class="plan-opt ${monthly?'sel':''}" data-b="monthly"><div class="po-t">Monthly</div><div class="po-p">$9.99</div><div class="po-s">per month</div></div>
+        <div class="plan-opt ${!monthly?'sel':''}" data-b="annual"><div class="po-tag">Save 40%</div><div class="po-t">Annual</div><div class="po-p">$5.99</div><div class="po-s">per month, billed yearly</div></div>
+      </div>
+      <button class="plan-cta" id="planCta">Start Onwards+ ${monthly?'· $9.99/mo':'· $71.88/yr'}</button>
+      <div class="plan-note">Demo prices for testing willingness to pay. No real payment. You can switch back to Free anytime.</div>
+      <div class="plan-compare">
+        <div class="row head"><span>What\u2019s included</span><div class="f">Free</div><div class="pp">Plus</div></div>
+        ${COMPARE.map(r=>`<div class="row"><span>${r[0]}</span><div class="f">${r[1]}</div><div class="pp">${r[2]}</div></div>`).join('')}
+      </div>
+      <div class="plan-manage" id="planLater">Maybe later</div>
+    </div>`;
+  $('#planX').onclick=closePaywall;
+  $('#planLater').onclick=closePaywall;
+  sheet.querySelectorAll('.plan-opt').forEach(o=>o.onclick=()=>{ planSel=o.dataset.b; renderPlanSheet(); });
+  $('#planCta').onclick=()=>{ state.billing=planSel; setTier('plus'); closePaywall(); toast('You’re on Onwards+. Everything’s on.'); };
+}
+let planSel = 'annual';
+
+// any .upsell button anywhere opens the paywall
+document.addEventListener('click', e=>{ if(e.target.closest('.upsell')) openPaywall(); });
+
+/* ---------- INIT ---------- */
+renderOb();
+</script>
+</body>
+</html>
