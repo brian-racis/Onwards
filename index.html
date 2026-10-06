@@ -529,6 +529,15 @@
   .move-btn{margin-top:14px;background:rgba(255,255,255,.16);border:none;color:#fff;font-family:inherit;font-weight:600;font-size:13.5px;padding:10px 16px;border-radius:30px;cursor:pointer;}
   .move-btn:hover{background:rgba(255,255,255,.26);}
 
+  /* ---- networking engine ---- */
+  .net-sec{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--calm-deep);margin:18px 0 2px;}
+  .net-found{background:var(--calm-soft);border-radius:16px;padding:16px;box-shadow:var(--shadow-sm);margin-bottom:14px;}
+  .net-found h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--calm-deep);margin-bottom:6px;}
+  .net-found .fv{font-size:14.5px;color:var(--ink);line-height:1.5;margin-bottom:12px;}
+  .net-found .fv:last-child{margin-bottom:0;}
+  .net-pri{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:middle;}
+  .net-hint{font-size:12.5px;color:var(--muted);line-height:1.5;margin:0 2px 14px;}
+
   /* ---- job tracker ---- */
   .jt-top{display:flex;gap:9px;margin-bottom:14px;flex-wrap:wrap;}
   .jt-stat{flex:1;min-width:72px;background:var(--card);border-radius:13px;padding:11px 8px;text-align:center;box-shadow:var(--shadow-sm);}
@@ -854,18 +863,18 @@ const DIMENSIONS = [
     {a:'End the day noting one thing that went right.', w:'What you review before sleep shapes how you wake.', t:'2 min'}
   ]},
   {key:'occupational', name:'Occupational', items:[
-    {a:'Post one short, honest thought on LinkedIn.', w:'Visibility creates luck. One post can reach the right person.', t:'15 min'},
-    {a:'Improve one bullet on your resume.', w:'Don\u2019t redo the whole thing. Just make one line stronger.', t:'15 min'},
-    {a:'Apply to one role you genuinely want.', w:'One thoughtful application beats ten copy-pastes.', t:'20 min'},
-    {a:'Watch one MasterClass or talk in your field.', w:'Learn from someone who\u2019s where you want to be.', t:'20 min'},
-    {a:'Reach out to one person for an informational chat.', w:'Most jobs come through people, not portals.', t:'10 min'},
-    {a:'Write three sentences on what you do best.', w:'You\u2019ll reuse these in every pitch, cover letter, and interview.', t:'10 min'},
-    {a:'Research one company you\u2019d love to work for.', w:'Target on purpose instead of applying everywhere.', t:'15 min'},
-    {a:'Practice \u201Ctell me about yourself\u201D out loud.', w:'The story you tell about your gap matters. Make it strong.', t:'10 min'},
-    {a:'Sharpen your LinkedIn headline and \u201Cabout.\u201D', w:'Recruiters skim. Make the first lines earn their place.', t:'15 min'},
-    {a:'Ask someone for feedback on your resume or pitch.', w:'An outside eye catches what you can\u2019t.', t:'10 min'},
-    {a:'List three skills from your last role that transfer anywhere.', w:'Reframe experience as portable, not lost.', t:'10 min'},
-    {a:'Set one small, doable goal for tomorrow\u2019s search.', w:'End today by removing tomorrow\u2019s \u201Cwhere do I start.\u201D', t:'5 min'}
+    {a:'Add 3 people to your list. Rank them by who could actually open a door.', w:'A target list turns “network more” into something you can act on.', t:'10 min'},
+    {a:'Send one honest message asking for a 20-minute coffee.', w:'Referrals drive a huge share of hires. This is how they start.', t:'10 min'},
+    {a:'Follow up with one person you haven’t heard back from.', w:'The follow-up is where most opportunities are won or lost.', t:'5 min'},
+    {a:'Write your 90-second story. Who you are, what you’re great at, what you want.', w:'You’ll use this in every coffee and call. Make it tight.', t:'15 min'},
+    {a:'Reconnect with one former colleague. No ask yet, just reconnect.', w:'Warm the relationship before you need anything from it.', t:'5 min'},
+    {a:'Pick one target company. Find one person connected to it.', w:'A person inside beats a cold application every time.', t:'15 min'},
+    {a:'Prep for your next coffee. Their background, your ask, one way to help them.', w:'“How can I help you?” is the question that opens doors.', t:'15 min'},
+    {a:'Debrief your last conversation. What you learned, who else to talk to.', w:'Each coffee should hand you the next two.', t:'10 min'},
+    {a:'Ask one person: “Who else should I be talking to?”', w:'This one question compounds your network faster than anything.', t:'5 min'},
+    {a:'Post one short, honest thought on LinkedIn.', w:'Staying visible means the right person remembers you exist.', t:'15 min'},
+    {a:'Thank someone who helped you this week.', w:'Gratitude keeps a network warm and willing.', t:'3 min'},
+    {a:'Sharpen one line of your resume so it tells your story.', w:'Your resume should back up the story you tell in the room.', t:'10 min'}
   ]},
   {key:'financial', name:'Financial', items:[
     {a:'Write down this month\u2019s essential expenses.', w:'Clarity reduces money fear more than avoidance ever will.', t:'15 min', fin:true},
@@ -964,7 +973,9 @@ let state = {
   reflections:[],          // {idx, text}
   digDeeper:[],            // {idx, q, a}
   history:{},              // {dayIdx: winsCount}
-  jobs:[]                  // {id, company, role, date, status, interviewDate, notes}
+  jobs:[],                 // {id, company, role, date, status, interviewDate, notes}
+  netFoundation:{answers:{}, story:'', built:false},
+  people:[]                // {id,name,company,how,priority,status,purpose,ask,help,learned,whoElse,nextStep,followUpOn,notes}
 };
 
 /* Per-person persistence. Guarded so it never breaks in restricted previews.
@@ -975,7 +986,7 @@ function saveState(){
     localStorage.setItem(SKEY, JSON.stringify({
       name:state.name, situation:state.situation, focus:state.focus,
       tier:state.tier, billing:state.billing,
-      history:state.history, reflections:state.reflections, digDeeper:state.digDeeper, jobs:state.jobs,
+      history:state.history, reflections:state.reflections, digDeeper:state.digDeeper, jobs:state.jobs, netFoundation:state.netFoundation, people:state.people,
       day:todayIdx, done:state.done, mood:state.mood, moodHistory:state.moodHistory, moodNotes:state.moodNotes, pace:state.pace
     }));
   }catch(e){}
@@ -986,7 +997,7 @@ function loadState(){
     const d=JSON.parse(raw)||{};
     state.name=d.name||''; state.situation=d.situation||''; state.focus=d.focus||[];
     state.tier=d.tier||'free'; state.billing=d.billing||'annual';
-    state.history=d.history||{}; state.reflections=d.reflections||[]; state.digDeeper=d.digDeeper||[]; state.moodHistory=d.moodHistory||{}; state.moodNotes=d.moodNotes||{}; state.pace=d.pace||3; state.jobs=d.jobs||[];
+    state.history=d.history||{}; state.reflections=d.reflections||[]; state.digDeeper=d.digDeeper||[]; state.moodHistory=d.moodHistory||{}; state.moodNotes=d.moodNotes||{}; state.pace=d.pace||3; state.jobs=d.jobs||[]; state.netFoundation=d.netFoundation||{answers:{},story:'',built:false}; state.people=d.people||[];
     if(d.day===todayIdx){ state.done=d.done||{}; state.mood=(d.mood!=null?d.mood:null); }
     else { state.done={}; state.mood=null; }   // new day: today starts fresh, history stays
     return !!state.name;
@@ -1682,6 +1693,8 @@ function buildActivitySnapshot(){
   const mv=movementStats();
   lines.push(`- This week vs last week: ${mv.thisWeek} practices this week, ${mv.lastWeek} last week; active ${mv.daysThis} of the last 7 days.`);
   if(state.digDeeper && state.digDeeper.length){ const dd=state.digDeeper.slice(-2).map(x=>`"${x.q}" -> "${x.a}"`).join('; '); lines.push(`- Recent Dig deeper answers (their own words on what they want): ${dd}.`); }
+  if(state.netFoundation && state.netFoundation.built){ const a=state.netFoundation.answers||{}; lines.push(`- Networking foundation set. Circle of competence: ${a.roles||'(n/a)'}. Looking for: ${a.ask||'(n/a)'}.`); }
+  if(state.people && state.people.length){ const coffees=state.people.filter(p=>['Coffee booked','Met','Following up'].includes(p.status)).length; const due=state.people.filter(p=>p.followUpOn && p.followUpOn<=todayISO() && p.status!=='Done').length; lines.push(`- Networking: ${state.people.length} people on their list, ${coffees} coffee-stage, ${due} follow-up(s) due.`); }
   if(state.jobs && state.jobs.length){ const by={}; state.jobs.forEach(j=>by[j.status]=(by[j.status]||0)+1); const parts=Object.keys(by).map(k=>by[k]+' '+k.toLowerCase()); const iv=state.jobs.filter(j=>j.status==='Interview').map(j=>j.company); lines.push(`- Job tracker: ${state.jobs.length} applications logged (${parts.join(', ')}).${iv.length?' Interview(s) coming up at: '+iv.join(', ')+'.':''}`); }
   if(state.linkedin && state.linkedin.plan){ const names=(state.linkedin.plan.pillars||[]).map(p=>p.name).join(', '); lines.push(`- Completed the LinkedIn brand tool. Their content pillars: ${names}.`); }
   return lines.join('\n');
@@ -1890,6 +1903,133 @@ function wirePrep(){
   const ps=$('#prepSpeak'); if(ps) ps.onclick=()=>{ jtPrepId=null; speakState.tab='drill'; openSpeak(); };
 }
 
+/* ============================================================
+   NETWORKING ENGINE (free tier, local) — the MVP centerpiece
+============================================================ */
+let netState={tab:'foundation', fStep:-1, personId:null};
+const NET_FQ=[
+  {id:'roles', q:'What’s genuinely in your wheelhouse?', hint:'Your circle of competence. The roles or functions where you can clearly do the work, not where you wish you could.', ph:'e.g. brand partnerships, growth marketing, ops'},
+  {id:'strengths', q:'What do people come to you for?', hint:'The two or three things you do better than most.', ph:'People rely on me for…'},
+  {id:'proof', q:'What’s one result that proves it?', hint:'A specific win. Use numbers if you have them.', ph:'I…'},
+  {id:'target', q:'What kind of company or team fits you?', hint:'Stage, size, industry, culture. Where you’d do your best work.', ph:'I do my best work at…'},
+  {id:'ask', q:'In one line, what are you looking for next?', hint:'The clear ask anyone can act on in ten seconds.', ph:'I’m looking for…'}
+];
+const PSTATUS=['To reach out','Reached out','Coffee booked','Met','Following up','Done'];
+const PCOLOR={'To reach out':'#8890A2','Reached out':'#6E86C6','Coffee booked':'#E89A66','Met':'#3E9B8E','Following up':'#5B6B9E','Done':'#B57E86'};
+const PPRIO={'High':'#E37B57','Medium':'#E0A23C','Low':'#8890A2'};
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+
+function openNetworking(){ resState.screen='networking'; netState.personId=null; renderNetworking(); }
+function renderNetworking(){
+  const body=$('#resourcesBody');
+  let h='<button class="li-back" id="netBack">← Resources</button>';
+  h+=`<div class="r-tabs">
+    <button class="${netState.tab==='foundation'?'on':''}" data-t="foundation">Your foundation</button>
+    <button class="${netState.tab==='people'?'on':''}" data-t="people">Coffees</button>
+  </div><div id="netBody"></div>`;
+  body.innerHTML=h;
+  $('#netBack').onclick=()=>{ resState.screen='list'; netState.personId=null; renderResources(); };
+  body.querySelectorAll('.r-tabs button').forEach(b=>b.onclick=()=>{ netState.tab=b.dataset.t; netState.personId=null; renderNetworking(); });
+  if(netState.tab==='foundation') renderFoundation(); else renderPeople();
+}
+
+/* ---- Foundation: circle of competence + 90-second story ---- */
+function saveNetF(Q){ if(Q.type!=='done'){ const el=$('#netFInput'); if(el) state.netFoundation.answers[Q.id]=el.value.trim(); } }
+function buildStory(){
+  const a=state.netFoundation.answers;
+  const parts=[];
+  if(a.strengths) parts.push('I’m someone people come to for '+a.strengths.replace(/\.$/,'')+'.');
+  if(a.proof) parts.push('Most recently, '+a.proof.replace(/^I\s+/i,'I ').replace(/\.$/,'')+'.');
+  if(a.target) parts.push('I do my best work at '+a.target.replace(/\.$/,'')+'.');
+  if(a.ask) parts.push('Right now I’m looking for '+a.ask.replace(/\.$/,'')+'.');
+  return parts.join(' ');
+}
+function renderFoundation(){
+  const wrap=$('#netBody'); if(!wrap) return;
+  const f=state.netFoundation;
+  if(f.built && netState.fStep!=='edit'){
+    const a=f.answers;
+    let h='<p class="net-hint">This is what you lead with in every conversation. Keep it sharp. Edit anytime.</p>';
+    h+='<div class="net-found">';
+    if(a.roles){ h+='<h4>Your circle of competence</h4><div class="fv">'+esc(a.roles)+'</div>'; }
+    if(a.strengths){ h+='<h4>Known for</h4><div class="fv">'+esc(a.strengths)+'</div>'; }
+    h+='</div>';
+    h+='<div class="net-found"><h4>Your story (90 seconds)</h4><textarea class="q-text" id="netStory" style="min-height:120px">'+esc(f.story||buildStory())+'</textarea><div class="jt-actions" style="margin-top:10px"><button class="jt-btn prep" id="netStorySave">Save story</button></div></div>';
+    if(a.ask){ h+='<div class="net-found"><h4>Your one-line ask</h4><div class="fv">'+esc(a.ask)+'</div></div>'; }
+    h+='<div class="jt-actions"><button class="jt-btn" id="netEdit">Edit answers</button></div>';
+    wrap.innerHTML=h;
+    $('#netStorySave').onclick=()=>{ state.netFoundation.story=$('#netStory').value.trim(); saveState(); toast('Story saved.'); };
+    $('#netEdit').onclick=()=>{ netState.fStep=0; renderFoundation(); };
+    return;
+  }
+  if(netState.fStep===-1){
+    wrap.innerHTML='<div class="q-card"><div class="q-eyebrow">Foundation</div><h2>Get your story straight first.</h2><p class="q-hint" style="font-size:14.5px;color:var(--ink-soft)">Before you reach out to anyone, get clear on what you’re great at and what you want. Five questions. You’ll leave with a circle of competence, a 90-second story, and a one-line ask you can use in every coffee.</p><div class="q-nav"><span style="flex:1"></span><button class="btn-occ" id="netFStart">Start →</button></div></div>';
+    $('#netFStart').onclick=()=>{ netState.fStep=0; renderFoundation(); };
+    return;
+  }
+  const idx=netState.fStep, Q=NET_FQ[idx], saved=state.netFoundation.answers[Q.id]||'';
+  const last=idx===NET_FQ.length-1;
+  wrap.innerHTML='<div class="q-card"><div class="q-eyebrow">Question '+(idx+1)+' of '+NET_FQ.length+'</div><h2>'+Q.q+'</h2><p class="q-hint">'+Q.hint+'</p><textarea class="q-text" id="netFInput" placeholder="'+escA(Q.ph)+'">'+esc(saved)+'</textarea><div class="q-nav">'+(idx===0?'<span style="width:54px"></span>':'<button class="btn-ghost" id="netFPrev">← Back</button>')+'<div class="q-dots">'+NET_FQ.map((_,k)=>'<i class="'+(k===idx?'on':'')+'"></i>').join('')+'</div><button class="btn-occ" id="netFNext">'+(last?'Build it':'Continue')+'</button></div></div>';
+  const prev=$('#netFPrev'); if(prev) prev.onclick=()=>{ saveNetF(Q); netState.fStep=idx-1; renderFoundation(); };
+  $('#netFNext').onclick=()=>{ saveNetF(Q); if(last){ state.netFoundation.built=true; state.netFoundation.story=buildStory(); netState.fStep=null; saveState(); renderFoundation(); } else { netState.fStep=idx+1; renderFoundation(); } };
+}
+
+/* ---- Coffees: people list + per-person prep / debrief / follow-up ---- */
+function renderPeople(){
+  const wrap=$('#netBody'); if(!wrap) return;
+  const people=state.people||[];
+  if(netState.personId){ wrap.innerHTML=renderPersonForm(netState.personId==='new'?null:people.find(p=>p.id===netState.personId)); wirePersonForm(); return; }
+  const coffees=people.filter(p=>['Coffee booked','Met','Following up'].includes(p.status)).length;
+  const due=people.filter(p=>p.followUpOn && p.followUpOn<=todayISO() && p.status!=='Done').length;
+  let h='<div class="jt-top"><div class="jt-stat"><b>'+people.length+'</b><small>people</small></div><div class="jt-stat"><b>'+coffees+'</b><small>coffees</small></div><div class="jt-stat"><b>'+due+'</b><small>follow-ups due</small></div></div>';
+  h+='<button class="jt-add" id="netAdd">+ Add someone to reach out to</button>';
+  if(!people.length){ h+='<div class="jt-empty">No one yet. Start with people who already know you. A former manager, a colleague, a friend in the industry. Add them here, then work each one from first hello to follow-up.</div>'; }
+  const prio={'High':0,'Medium':1,'Low':2}; const stat={'Following up':0,'Coffee booked':1,'Met':2,'Reached out':3,'To reach out':4,'Done':5};
+  people.slice().sort((a,b)=>(stat[a.status]-stat[b.status])||(prio[a.priority]-prio[b.priority])).forEach(p=>{
+    const dueFlag=p.followUpOn && p.followUpOn<=todayISO() && p.status!=='Done';
+    h+='<div class="jt-card" style="--st:'+(PCOLOR[p.status]||'#8890A2')+'"><h4><span class="net-pri" style="background:'+(PPRIO[p.priority]||'#8890A2')+'"></span>'+esc(p.name)+'</h4>'+(p.company?'<div class="role">'+esc(p.company)+'</div>':'')+'<div class="jt-meta"><span class="jt-status">'+p.status+'</span>'+(p.nextStep?'<span class="jt-date">Next: '+esc(p.nextStep)+'</span>':'')+(dueFlag?'<span class="jt-date" style="color:var(--c-physical);font-weight:700">Follow up due</span>':'')+'</div><div class="jt-actions"><button class="jt-btn prep" data-open="'+p.id+'">Open</button></div></div>';
+  });
+  wrap.innerHTML=h;
+  const add=$('#netAdd'); if(add) add.onclick=()=>{ netState.personId='new'; renderNetworking(); };
+  wrap.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{ netState.personId=b.dataset.open; renderNetworking(); });
+}
+function renderPersonForm(p){
+  p=p||{};
+  const prioOpts=['High','Medium','Low'].map(s=>'<option '+(p.priority===s?'selected':'')+'>'+s+'</option>').join('');
+  const statOpts=PSTATUS.map(s=>'<option '+(p.status===s?'selected':'')+'>'+s+'</option>').join('');
+  const story=state.netFoundation.story?('<div class="net-hint" style="margin-top:0"><b>Your story reminder:</b> '+esc(state.netFoundation.story)+'</div>'):'';
+  return '<div class="jt-form">'
+    +'<div class="net-sec">Who</div>'
+    +'<label>Name</label><input id="pName" value="'+escA(p.name)+'" placeholder="e.g. Dana Lee">'
+    +'<label>Company</label><input id="pCompany" value="'+escA(p.company)+'" placeholder="Where they work">'
+    +'<label>How you know them</label><input id="pHow" value="'+escA(p.how)+'" placeholder="Former manager, friend, cold intro…">'
+    +'<div class="row"><div><label>Priority</label><select id="pPriority">'+prioOpts+'</select></div><div><label>Status</label><select id="pStatus">'+statOpts+'</select></div></div>'
+    +'<div class="net-sec">Prep for the coffee</div>'+story
+    +'<label>Purpose of this meeting</label><input id="pPurpose" value="'+escA(p.purpose)+'" placeholder="Advice, intro, learn about their team…">'
+    +'<label>Your ask</label><input id="pAsk" value="'+escA(p.ask)+'" placeholder="One clear, small ask">'
+    +'<label>One way you can help them</label><input id="pHelp" value="'+escA(p.help)+'" placeholder="Make it a two-way street">'
+    +'<div class="net-sec">After the coffee</div>'
+    +'<label>What you learned</label><textarea id="pLearned" rows="2" placeholder="Notes from the conversation">'+esc(p.learned||'')+'</textarea>'
+    +'<label>Who else should you talk to?</label><input id="pWho" value="'+escA(p.whoElse)+'" placeholder="The names they gave you">'
+    +'<div class="net-sec">Follow-up</div>'
+    +'<div class="row"><div><label>Next step</label><input id="pNext" value="'+escA(p.nextStep)+'" placeholder="Send thank-you, intro email…"></div><div><label>By when</label><input id="pFollow" type="date" value="'+escA(p.followUpOn)+'"></div></div>'
+    +'<label>Notes</label><textarea id="pNotes" rows="2" placeholder="Anything else">'+esc(p.notes||'')+'</textarea>'
+    +'<div class="jt-form-actions"><button class="jt-save" id="pSave">Save</button><button class="jt-cancel" id="pCancel">Cancel</button>'+(p.id?'<button class="jt-cancel" id="pDelete" style="color:var(--c-physical)">Delete</button>':'')+'</div>'
+    +'</div>';
+}
+function wirePersonForm(){
+  const save=$('#pSave'); if(save) save.onclick=savePerson;
+  const cancel=$('#pCancel'); if(cancel) cancel.onclick=()=>{ netState.personId=null; renderNetworking(); };
+  const del=$('#pDelete'); if(del) del.onclick=()=>{ state.people=state.people.filter(x=>x.id!==netState.personId); netState.personId=null; saveState(); renderNetworking(); toast('Removed.'); };
+}
+function savePerson(){
+  const name=$('#pName').value.trim(); if(!name){ $('#pName').focus(); return; }
+  const rec={ name, company:$('#pCompany').value.trim(), how:$('#pHow').value.trim(), priority:$('#pPriority').value, status:$('#pStatus').value, purpose:$('#pPurpose').value.trim(), ask:$('#pAsk').value.trim(), help:$('#pHelp').value.trim(), learned:$('#pLearned').value.trim(), whoElse:$('#pWho').value.trim(), nextStep:$('#pNext').value.trim(), followUpOn:$('#pFollow').value, notes:$('#pNotes').value.trim() };
+  if(netState.personId==='new'){ rec.id='p'+Date.now(); state.people.push(rec); }
+  else { const p=state.people.find(x=>x.id===netState.personId); if(p) Object.assign(p,rec); }
+  netState.personId=null; saveState(); renderNetworking(); toast('Saved.');
+}
+
 function esc(s){ return (s||'').toString().replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
 function escA(s){ return (s||'').toString().replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 function escAttr(s){ return (s||'').toString().replace(/"/g,'&quot;'); }
@@ -1899,8 +2039,11 @@ function renderResources(){
   if(resState.screen==='coach'){ renderCoach(); return; }
   if(resState.screen==='speak'){ renderSpeak(); return; }
   if(resState.screen==='tracker'){ renderTracker(); return; }
+  if(resState.screen==='networking'){ renderNetworking(); return; }
   const body=$('#resourcesBody'); body.innerHTML='';
   const cards=[
+    {id:'networking', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>',
+      title:'Your network', desc:'The lever that actually lands jobs. Build your story, then work a list of coffees from first hello to follow-up.', active:true},
     {id:'linkedin', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>',
       title:'Find your LinkedIn voice', desc:'A guided Q&A to uncover your personal brand and 3–5 content pillars. Then a plan to start posting.', active:true},
     {id:'coach', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
@@ -1910,10 +2053,9 @@ function renderResources(){
     {id:'tracker', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v5"/><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M3 15h18"/></svg>',
       title:'Job search tracker', desc:'Log applications, responses, and interviews. Get a steady hand to prep when an interview is scheduled.', active:true},
     {id:'resume', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>', title:'Refresh your resume', desc:'Turn your experience into sharp, modern bullet points.', active:false},
-    {id:'interview', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>', title:'Practice interviews', desc:'Rehearse your answers and get gentle, useful feedback.', active:false},
-    {id:'network', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>', title:'Reach out with confidence', desc:'Warm-outreach scripts that don\u2019t feel like begging.', active:false}
+    {id:'interview', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>', title:'Practice interviews', desc:'Rehearse your answers and get gentle, useful feedback.', active:false}
   ];
-  const openers={linkedin:openLinkedIn, coach:openCoach, speak:openSpeak, tracker:openTracker};
+  const openers={networking:openNetworking, linkedin:openLinkedIn, coach:openCoach, speak:openSpeak, tracker:openTracker};
   cards.forEach(c=>{
     const el=ce('div','res-card'+(c.active?'':' soon'));
     el.innerHTML=`<div class="r-ic">${c.icon}</div>
