@@ -529,6 +529,17 @@
   .move-btn{margin-top:14px;background:rgba(255,255,255,.16);border:none;color:#fff;font-family:inherit;font-weight:600;font-size:13.5px;padding:10px 16px;border-radius:30px;cursor:pointer;}
   .move-btn:hover{background:rgba(255,255,255,.26);}
 
+  /* ---- starting point ---- */
+  .start-btn{background:none;border:none;color:var(--calm-deep);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;padding:4px 0;text-decoration:underline;text-underline-offset:2px;margin-top:2px;}
+  .start-panel{display:none;margin-top:8px;padding:12px 13px;background:var(--calm-soft);border-radius:12px;}
+  .start-panel.show{display:block;animation:fade .3s;}
+  .sp-def{font-size:13.5px;color:var(--ink);line-height:1.5;margin-bottom:8px;}
+  .sp-ex{font-size:13.5px;color:var(--ink-soft);line-height:1.5;margin-bottom:10px;}
+  .sp-ex b{color:var(--calm-deep);}
+  .sp-link{display:inline-block;font-size:13.5px;font-weight:600;color:var(--calm-deep);text-decoration:none;background:var(--card);border:1px solid color-mix(in srgb,var(--calm) 30%,transparent);border-radius:20px;padding:8px 14px;}
+  .sp-link:hover{border-color:var(--calm);}
+  .sp-leaves{display:block;font-size:11px;color:var(--muted);margin-top:6px;font-style:italic;}
+
   /* ---- networking engine ---- */
   .net-sec{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--calm-deep);margin:18px 0 2px;}
   .net-found{background:var(--calm-soft);border-radius:16px;padding:16px;box-shadow:var(--shadow-sm);margin-bottom:14px;}
@@ -878,15 +889,15 @@ const DIMENSIONS = [
   ]},
   {key:'financial', name:'Financial', items:[
     {a:'Write down this month\u2019s essential expenses.', w:'Clarity reduces money fear more than avoidance ever will.', t:'15 min', fin:true},
-    {a:'Check which benefits or assistance you may qualify for.', w:'This is exactly what those systems exist for. Use them without shame.', t:'20 min', fin:true},
-    {a:'Learn what an index fund is, in plain English.', w:'Five minutes of literacy demystifies \u201Cinvesting.\u201D', t:'10 min', fin:true},
+    {a:'Check which benefits or assistance you may qualify for.', w:'This is exactly what those systems exist for. Use them without shame.', t:'20 min', fin:true, def:'Benefits.gov helps you find federal and state programs you may qualify for, from unemployment to food and healthcare support.', ex:'Run the eligibility questionnaire. It takes about 10 minutes.', link:{t:'Benefits.gov', u:'https://www.benefits.gov'}},
+    {a:'Learn what an index fund is, in plain English.', w:'Five minutes of literacy demystifies \u201Cinvesting.\u201D', t:'10 min', fin:true, def:'An index fund is a low-cost investment that holds a little of everything in a market index (like the S&P 500), so it moves with the market overall instead of betting on single stocks.', ex:'Read the first two sections, then write one sentence on why they\u2019re popular.', link:{t:'SEC: Index Funds', u:'https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-26'}},
     {a:'Find one subscription you can pause.', w:'A small cut today buys runway and calm.', t:'5 min', fin:true},
     {a:'Brainstorm three ways you could earn a little on the side.', w:'Options reduce panic, even the ones you don\u2019t use.', t:'10 min', fin:true},
-    {a:'Read one beginner piece on emergency funds.', w:'Knowing the playbook makes the future feel less random.', t:'10 min', fin:true},
+    {a:'Read one beginner piece on emergency funds.', w:'Knowing the playbook makes the future feel less random.', t:'10 min', fin:true, def:'An emergency fund is cash set aside for surprises, like a car repair or a gap in income. Even a small one lowers stress.', ex:'A good first target is one month of essentials. What\u2019s yours?', link:{t:'CFPB: Emergency funds', u:'https://www.consumerfinance.gov/an-essential-guide-to-building-an-emergency-fund/'}},
     {a:'Make a \u201Cneeds vs wants\u201D list for this week.', w:'Spending on purpose beats guilt after the fact.', t:'10 min', fin:true},
     {a:'Look up one freelance or gig platform in your field.', w:'A small income stream can bridge the gap.', t:'15 min', fin:true},
     {a:'Set one tiny, specific budget or savings goal.', w:'Small targets you can actually hit rebuild a sense of control.', t:'5 min', fin:true},
-    {a:'Learn the difference between \u201Cgood\u201D and \u201Cbad\u201D debt.', w:'Understanding the tools lowers the fear of them.', t:'10 min', fin:true},
+    {a:'Learn the difference between \u201Cgood\u201D and \u201Cbad\u201D debt.', w:'Understanding the tools lowers the fear of them.', t:'10 min', fin:true, def:'Rough rule: \u201Cgood\u201D debt buys something that grows in value or income (education, sometimes a home). \u201Cbad\u201D debt funds things that lose value, especially at high interest, like a credit-card balance.', ex:'List your debts by interest rate. The highest-rate one is usually what to tackle first.'},
     {a:'Note one money decision you\u2019re proud of.', w:'You\u2019ve made smart calls before. You\u2019ll make them again.', t:'3 min', fin:true},
     {a:'Plan a no-spend day this week.', w:'A small challenge turns restriction into a game you win.', t:'\u2014', fin:true}
   ]}
@@ -1262,6 +1273,7 @@ function renderCards(){
       </div>
       <div class="action">${L.a}</div>
       <div class="why">${L.w}</div>
+      ${(L.def||L.ex||L.link)?`<button class="start-btn" type="button">Need a starting point?</button><div class="start-panel">${L.def?`<p class="sp-def">${esc(L.def)}</p>`:''}${L.ex?`<p class="sp-ex"><b>Try:</b> ${esc(L.ex)}</p>`:''}${L.link?`<a class="sp-link" href="${escA(L.link.u)}" target="_blank" rel="noopener">${esc(L.link.t)} ↗</a><span class="sp-leaves">opens a trusted outside source</span>`:''}</div>`:''}
       ${(L.fin||dim.key==='financial')?'<div class="disclaimer">General wellness content, not financial advice. For decisions about your money, consider a qualified professional.</div>':''}
       <div class="card-foot">
         <button class="mark${isDone?' is-done':''}">${isDone?'✓ Done':'Mark done'}</button>
@@ -1277,6 +1289,7 @@ function renderCards(){
     c.querySelector('.mark').onclick=()=>toggleDone(dim.key);
     c.querySelector('.swap').onclick=()=>{ state.swaps[dim.key]=(state.swaps[dim.key]||0)+1; delete state.aiLessons[dim.key]; delete state.override[dim.key]; delete state.difficulty[dim.key]; delete state.done[dim.key]; renderCards(); updateSky(); saveState(); };
     c.querySelector('.help-btn').onclick=()=>openChatWithTask(dim,L);
+    { const sb=c.querySelector('.start-btn'); if(sb) sb.onclick=()=>{ const p=sb.nextElementSibling; const open=p.classList.toggle('show'); sb.textContent= open?'Hide starting point':'Need a starting point?'; }; }
     c.querySelectorAll('.diff-pill').forEach(p=>p.onclick=()=>setDifficulty(dim,i,p.dataset.lvl));
     wrap.appendChild(c);
   });
@@ -1551,7 +1564,7 @@ async function setDifficulty(dim,i,level){
   if(card) card.classList.add('skel');
   const dir = level==='easier'
     ? 'easier and lower-friction: smaller, gentler, and quicker, so it feels doable on a hard day'
-    : 'more of a stretch: a bit more depth, effort, or time, for a day with more in the tank';
+    : 'more of a stretch, defined concretely: push past comfortable with a specific escalation (more time, more depth, a harder or higher-stakes ask, or a second rep), never a vague "do more"';
   const prompt=`Rewrite this daily wellness micro-practice to be ${dir}. Keep the same wellness dimension (${dim.name}) and a warm, encouraging tone for someone navigating job loss.
 Current action: "${base.a}"
 Respond with ONLY JSON, no markdown fences: {"action":"...","why":"...","time":"10 min"}`;
@@ -1566,12 +1579,22 @@ Respond with ONLY JSON, no markdown fences: {"action":"...","why":"...","time":"
   delete state.done[dim.key];
   renderCards(); updateSky(); saveState();
 }
+const HARDER_PUSH={
+  physical:'go longer or harder. More time, more reps, or a faster pace than you planned.',
+  emotional:'go deeper. Write a full page instead of a line, and sit with it before you move on.',
+  social:'raise the bar. Reach two people instead of one, and make one of them the ask you\u2019ve been avoiding.',
+  intellectual:'go beyond reading. Take notes, then explain it back out loud in your own words.',
+  spiritual:'extend it. Double the time, fully unplugged, with your phone in another room.',
+  occupational:'do it twice, or raise the stakes. A warmer message, or a more senior person than feels comfortable.',
+  financial:'go one level deeper. Put real numbers to it and write down the one next action.'
+};
 function heuristicScale(base,level,dim){
   if(level==='easier'){
     const a=base.a.charAt(0).toLowerCase()+base.a.slice(1).replace(/\.$/,'');
     return {a:`Just begin: ${a}. Even two minutes counts as done today.`, w:base.w, t:'2 min', fin:dim.key==='financial'};
   }
-  return {a:`${base.a.replace(/\.$/,'')}. Then go one step past what feels comfortable.`, w:base.w, t:'20+ min', fin:dim.key==='financial'};
+  const push=HARDER_PUSH[dim.key]||'push past comfortable: add time, depth, or one more rep.';
+  return {a:`${base.a.replace(/\.$/,'')}. Then push past comfortable: ${push}`, w:'Growth lives just past the edge of easy. One real stretch beats ten easy reps.', t:'20+ min', fin:dim.key==='financial'};
 }
 
 /* ---------- Ask Onwards: the chat coach ---------- */
@@ -1908,11 +1931,11 @@ function wirePrep(){
 ============================================================ */
 let netState={tab:'foundation', fStep:-1, personId:null};
 const NET_FQ=[
-  {id:'roles', q:'What’s genuinely in your wheelhouse?', hint:'Your circle of competence. The roles or functions where you can clearly do the work, not where you wish you could.', ph:'e.g. brand partnerships, growth marketing, ops'},
-  {id:'strengths', q:'What do people come to you for?', hint:'The two or three things you do better than most.', ph:'People rely on me for…'},
-  {id:'proof', q:'What’s one result that proves it?', hint:'A specific win. Use numbers if you have them.', ph:'I…'},
-  {id:'target', q:'What kind of company or team fits you?', hint:'Stage, size, industry, culture. Where you’d do your best work.', ph:'I do my best work at…'},
-  {id:'ask', q:'In one line, what are you looking for next?', hint:'The clear ask anyone can act on in ten seconds.', ph:'I’m looking for…'}
+  {id:'roles', q:'What’s genuinely in your wheelhouse?', hint:'Your circle of competence. The roles or functions where you can clearly do the work, not where you wish you could.', ph:'e.g. brand partnerships, growth marketing, ops', ex:'Brand partnerships and growth marketing. I can own the outreach, the deals, and the numbers behind them.'},
+  {id:'strengths', q:'What do people come to you for?', hint:'The two or three things you do better than most.', ph:'People rely on me for…', ex:'Turning cold relationships into signed partners, and making data tell a clear story.'},
+  {id:'proof', q:'What’s one result that proves it?', hint:'A specific win. Use numbers if you have them.', ph:'I…', ex:'I built a partner program from zero to 40 brands and six figures in its first year.'},
+  {id:'target', q:'What kind of company or team fits you?', hint:'Stage, size, industry, culture. Where you’d do your best work.', ph:'I do my best work at…', ex:'Early-stage consumer brands with small teams, where I can wear a few hats.'},
+  {id:'ask', q:'In one line, what are you looking for next?', hint:'The clear ask anyone can act on in ten seconds.', ph:'I’m looking for…', ex:'A partnerships or BD role at a consumer brand, ideally a warm intro to the team.'}
 ];
 const PSTATUS=['To reach out','Reached out','Coffee booked','Met','Following up','Done'];
 const PCOLOR={'To reach out':'#8890A2','Reached out':'#6E86C6','Coffee booked':'#E89A66','Met':'#3E9B8E','Following up':'#5B6B9E','Done':'#B57E86'};
@@ -1969,7 +1992,9 @@ function renderFoundation(){
   }
   const idx=netState.fStep, Q=NET_FQ[idx], saved=state.netFoundation.answers[Q.id]||'';
   const last=idx===NET_FQ.length-1;
-  wrap.innerHTML='<div class="q-card"><div class="q-eyebrow">Question '+(idx+1)+' of '+NET_FQ.length+'</div><h2>'+Q.q+'</h2><p class="q-hint">'+Q.hint+'</p><textarea class="q-text" id="netFInput" placeholder="'+escA(Q.ph)+'">'+esc(saved)+'</textarea><div class="q-nav">'+(idx===0?'<span style="width:54px"></span>':'<button class="btn-ghost" id="netFPrev">← Back</button>')+'<div class="q-dots">'+NET_FQ.map((_,k)=>'<i class="'+(k===idx?'on':'')+'"></i>').join('')+'</div><button class="btn-occ" id="netFNext">'+(last?'Build it':'Continue')+'</button></div></div>';
+  const exHtml=Q.ex?('<button class="start-btn" type="button">Need an example?</button><div class="start-panel"><p class="sp-ex"><b>Example:</b> '+esc(Q.ex)+'</p></div>'):'';
+  wrap.innerHTML='<div class="q-card"><div class="q-eyebrow">Question '+(idx+1)+' of '+NET_FQ.length+'</div><h2>'+Q.q+'</h2><p class="q-hint">'+Q.hint+'</p><textarea class="q-text" id="netFInput" placeholder="'+escA(Q.ph)+'">'+esc(saved)+'</textarea>'+exHtml+'<div class="q-nav">'+(idx===0?'<span style="width:54px"></span>':'<button class="btn-ghost" id="netFPrev">← Back</button>')+'<div class="q-dots">'+NET_FQ.map((_,k)=>'<i class="'+(k===idx?'on':'')+'"></i>').join('')+'</div><button class="btn-occ" id="netFNext">'+(last?'Build it':'Continue')+'</button></div></div>';
+  { const sb=wrap.querySelector('.start-btn'); if(sb) sb.onclick=()=>{ const p=sb.nextElementSibling; const o=p.classList.toggle('show'); sb.textContent=o?'Hide example':'Need an example?'; }; }
   const prev=$('#netFPrev'); if(prev) prev.onclick=()=>{ saveNetF(Q); netState.fStep=idx-1; renderFoundation(); };
   $('#netFNext').onclick=()=>{ saveNetF(Q); if(last){ state.netFoundation.built=true; state.netFoundation.story=buildStory(); netState.fStep=null; saveState(); renderFoundation(); } else { netState.fStep=idx+1; renderFoundation(); } };
 }
